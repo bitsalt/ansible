@@ -1,0 +1,30 @@
+server {
+	listen 443 ssl;
+	listen [::]:443 ssl;
+
+	server_name { site_url };
+
+	root /var/www/{ working_dir }/public;
+	index index.php index.html;
+
+    ssl_certificate /etc/letsencrypt/live/{ site_url }/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{ site_url }/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    client_max_body_size 30m;
+
+    location ~ \.php$ {
+       try_files $uri =404;
+       fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+       fastcgi_index index.php;
+       fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+       include fastcgi_params;
+                
+     }
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+        gzip_static on;
+    }
+}
