@@ -1,0 +1,34 @@
+---
+- hosts: appservers
+  remote_user: bitsalt
+  vars_files:
+    - secrets.yml
+  vars: # Define new variables
+    github_repo_url: https://{{github_user}}:{{github_token}}@github.com/bitsalt/ocs.git
+    working_directory: /var/www/dev.bitsalt.com
+  tasks:
+    - name: Pull changes from GitHub
+      git:
+        repo: "{{github_repo_url}}" # This is how we can make this step reusable across projects
+        dest: "{{working_directory}}"
+        version: main # Branch to pull
+        accept_hostkey: yes
+      register: repo # Store the result of this task in a variable
+      
+    - name: Install Composer dependencies
+      community.general.composer:
+        command: install # --no-scripts --no-dev
+        working_dir: working_directory
+#        when: repo.changed # Only run this step if we actually pulled new changes from GitHub
+    
+    - name: Cache the configuration
+      script: "php artisan config:cache"
+#      when: repo.changed # Only run if we pulled changes
+      
+    - name: Clear the view cache
+      script: "php artisan view:clear"
+      when: repo.changed # Only run if we pulled changes
+      
+    - name: Run the migrations
+      script: "php artisan migrate --force"
+      when: repo.changed # Only run if we pulled changes
