@@ -1,0 +1,7 @@
+---
+nginx_ssl_cert_content: |
+    -----BEGIN CERTIFICATE-----
+    -----END CERTIFICATE-----
+nginx_ssl_key_content: |
+    -----BEGIN PRIVATE KEY-----
+    -----END PRIVATE KEY-----

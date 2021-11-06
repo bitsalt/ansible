@@ -1,0 +1,16 @@
+---
+# defaults file for nginx
+enabled_sites:
+  - lessonbank:
+    url: lesson.bitsalt.com
+    web_root: lesson.bitsalt.com
+    github_repo: git@github.com:bitsalt/lessonbank-wordpress.git
+  # - ocs.bitsalt.com:
+  #   url: ocs.bitsalt.com
+  #   web_root: ocsontheweb.com
+  #   github_repo: git@github.com:bitsalt/ocs.git
+  - dev.bitsalt.com:
+    url: dev.bitsalt.com
+    web_root: dev.bitsalt.com
+    # github_repo: git@github.com:bitsalt/bitsalt-laravel.git
+    github_repo: git@github.com:bitsalt/ocs.git

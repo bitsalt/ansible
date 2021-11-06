@@ -1,0 +1,6 @@
+---
+# Enable a new site 
+- name: Enable new site
+  template:
+    dest: /var/www/{ site_}
+    src: 

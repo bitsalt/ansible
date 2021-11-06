@@ -1,0 +1,13 @@
+---
+- hosts: all
+  become: yes
+  vars_files:
+    /home/jeff/ansible/bitsalt_ansible/secrets.yml
+  tasks:
+    - name: Debugging
+      debug:
+        msg: Looping over {{ inventory_hostname }}
+  # - name: Check for software updates
+  #   apt:
+  #     update_cache: yes
+  #     cache_valid_time: 7200 # two hours

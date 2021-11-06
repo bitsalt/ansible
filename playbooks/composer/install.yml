@@ -1,26 +1,28 @@
 ---
+- hosts: appservers
+  become: yes
+  tasks:
+    - name: Validate Composer checksum
+      become: yes
+      get_url:
+        checksum: "sha384:906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8"
+        dest: /usr/src/
+        url: https://getcomposer.org/installer
+      
+    - name: Download and install Composer
+      become: yes
+      shell: curl -sS https://getcomposer.org/installer | php
+      args:
+        chdir: /usr/src/
+        creates: /usr/local/bin/composer
+        warn: false
 
-- name: Validate Composer checksum
-  become: yes
-  get_url:
-    checksum: "sha384:906a84df04cea2aa72f40b5f787e49f22d4c2f19492ac310e8cba5b96ac8b64115ac402c8cd292b8a03482574915d1a8"
-    dest: /usr/src/
-    url: https://getcomposer.org/installer
-  
-- name: Download and install Composer
-  become: yes
-  shell: curl -sS https://getcomposer.org/installer | php
-  args:
-    chdir: /usr/src/
-    creates: /usr/local/bin/composer
-    warn: false
-
-- name: Add Composer to global path
-  become: yes
-  copy:
-    dest: /usr/local/bin/composer
-    group: root
-    mode: '0755'
-    owner: root
-    src: /usr/src/composer.phar
-    remote_src: yes
+    - name: Add Composer to global path
+      become: yes
+      copy:
+        dest: /usr/local/bin/composer
+        group: root
+        mode: '0755'
+        owner: root
+        src: /usr/src/composer.phar
+        remote_src: yes

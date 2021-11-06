@@ -1,3 +1,0 @@
-# Run this on the other machines and then delete. It
-# sets default name of repos to 'main'
-git config --global init.defaultBranch main
