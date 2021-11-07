@@ -1,0 +1,8 @@
+---
+# tasks file for nginx
+- hosts: localhost
+  #   /home/jeff/ansible/bitsalt_ansible/secrets.yml
+  tasks:
+  # - name: debug
+    debug:
+      msg: "hosts: {{ appserver_hosts }}"

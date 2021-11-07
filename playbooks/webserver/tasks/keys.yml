@@ -1,0 +1,6 @@
+---
+# Write bastion public key to a server
+- name: Add bastion public key
+  lineinfile:
+    path: /home/bitsalt/.ssh/authorized_keys
+    line: "{{ bastion_public_key }}"

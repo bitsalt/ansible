@@ -1,0 +1,29 @@
+---
+# tasks file for nginx
+- hosts: bastion
+  become: yes
+  vars_files:
+    /home/jeff/ansible/bitsalt_ansible/secrets.yml
+  tasks:
+  # - name: debug
+    # debug:
+    #   msg: "become pass: {{ become_passwd }}"
+  - name: Enable firewall
+    include_tasks: bastion-firewall.yml
+  # - name: Install software
+  #   include_tasks: install.yml
+
+- hosts: appservers
+  become: yes
+  vars_files:
+    /home/jeff/ansible/bitsalt_ansible/secrets.yml
+  tasks:
+  # - name: debug
+    # debug:
+    #   msg: "become pass: {{ become_passwd }}"
+  - name: Enable firewall
+    include_tasks: app-firewall.yml
+  - name: Add bastion keys 
+    include_tasks: keys.yml
+  # - name: Install software
+  #   include_tasks: install.yml

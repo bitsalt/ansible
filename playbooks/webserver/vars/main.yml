@@ -1,0 +1,9 @@
+---
+# vars file for nginx
+appserver_hosts:
+  - app01:
+    name: bitsalt-app01
+    ip: 138.197.59.39
+  - app02:
+    name: bitsalt-app02
+    ip: 45.55.122.176

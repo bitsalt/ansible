@@ -1,0 +1,6 @@
+---
+# Add appservers to hosts file
+- name: Edit hosts file
+  lineinfile:
+    path: /etc/hosts
+    line: 

@@ -1,0 +1,35 @@
+---
+- name: Reject authentication attempts
+  ufw:
+    rule: reject
+    port: auth
+    log: yes
+- name: Limit SSH attempts
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+- name: Allow HTTP traffic
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+- name: Allow HTTPS traffic
+  ufw:
+    rule: allow
+    port: '443'
+    proto: tcp
+- name: Allow DB server connection
+  ufw:
+    rule: allow
+    port: '3306'
+    src: 10.132.122.218
+- name: Allow SSH from bastion
+  ufw:
+    rule: allow
+    port: '22'
+    src: 10.132.122.220
+- name: Start/reload firewall
+  ufw:
+    state: enabled
+    

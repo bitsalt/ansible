@@ -1,10 +1,5 @@
 ---
 # Install Nginx and related software
-
-- hosts: "{ hostname }"
-  include_vars:
-  sudo: yes
-  tasks:
   - name: Install Nginx
     apt:
       name: "{ item }"
@@ -16,7 +11,4 @@
         - python3-mysql
         - php-fpm
         - php-mysql
-  - name: Nginx custom configuration
-    file: 
-      src: files/nginx.conf.j2
-      dest: /etc/nginx/nginx.conf
+  
