@@ -1,8 +1,15 @@
 ---
 # tasks file for nginx
-- hosts: localhost
-  #   /home/jeff/ansible/bitsalt_ansible/secrets.yml
+- hosts: bastion
+  strategy: debug
+  become: no
+  vars_files:
+    - /home/jeff/ansible/bitsalt_ansible/secrets.yml
+    - /home/jeff/ansible/bitsalt_ansible/playbooks/webserver/vars/main.yml
   tasks:
-  # - name: debug
+  - name: debug some stuff
     debug:
-      msg: "hosts: {{ appserver_hosts }}"
+      msg: "hosts: {{ item[1] }}"
+      #".key }} - {{ item.value }}"
+    with_indexed_items: "{{ appserver_hosts }}"
+    # with_dict: "{{ appserver_hosts }}"
