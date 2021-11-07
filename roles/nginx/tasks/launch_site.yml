@@ -1,6 +1,11 @@
 ---
 # Enable a new site 
-- name: Enable new site
+- name: Write new site conf file
   template:
-    dest: /var/www/{ site_}
-    src: 
+    dest: /etc/nginx/sites-available/{ working_dir }/{ site_url }.conf
+    src: nginx.conf.j2
+- name: Make symlink to site conf file
+  file:
+    src: /etc/nginx/sites-available/{ working_dir }/{ site_url }.conf
+    dest: /etc/nginx/sites-enabled/{ working_dir }/{ site_url }.conf
+    state: link
