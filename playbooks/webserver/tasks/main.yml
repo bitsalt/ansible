@@ -1,21 +1,5 @@
 ---
-# tasks file for nginx
-- hosts: bastion
-  become: yes
-  vars_files:
-    - /home/jeff/ansible/bitsalt_ansible/secrets.yml
-    - /home/jeff/ansible/bitsalt_ansible/playbooks/webserver/vars/main.yml
-  tasks:
-  # - name: debug
-    # debug:
-    #   msg: "become pass: {{ become_passwd }}"
-  - name: Enable firewall
-    include_tasks: bastion-firewall.yml
-  - name: Add servers to hosts file
-    include_tasks: bastion-hosts.yml
-  # - name: Install software
-  #   include_tasks: install.yml
-
+# tasks file for webservers
 - hosts: appservers
   become: yes
   vars_files:
