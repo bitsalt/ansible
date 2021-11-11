@@ -1,0 +1,13 @@
+---
+# handlers file for network_tasks
+- name: start firewall
+  ufw:
+    state: enabled
+
+- name: reload firewall
+  ufw:
+    state: reloaded
+
+- name: reload nginx
+  nginx:
+    state: reloaded

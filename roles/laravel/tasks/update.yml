@@ -1,0 +1,14 @@
+---
+# Update project files
+
+- name: Pull files from git repository
+  git:
+    repo: "{{ git.repo }}"
+    dest: "{{ host.webroot }}"
+  register: repo_updated
+
+- name: Run a composer update 
+  community.general.composer:
+    working_dir: "{{ host.webroot }}"
+    command: update
+  when: repo_updated

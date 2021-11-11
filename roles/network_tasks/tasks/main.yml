@@ -1,0 +1,94 @@
+---
+# tasks file for firewall
+
+# Firewall rules
+
+- name: Reject authentication attempts
+  ufw:
+    rule: reject
+    port: auth
+    log: yes
+  tags:
+  - firewall
+
+- name: Limit SSH attempts
+  ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+  tags:
+  - firewall
+  
+- name: Allow HTTP traffic
+  ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+  tags:
+  - firewall
+  
+- name: Allow HTTPS traffic
+  ufw:
+    rule: allow
+    port: '443'
+    proto: tcp
+  tags:
+  - firewall
+  
+- name: Allow DB server connection
+  ufw:
+    rule: allow
+    port: '3306'
+    src: 10.132.122.218
+  tags: 
+  - deploy_appserver
+  - deploy_bastion
+
+- name: Allow SSH from bastion
+  ufw:
+    rule: allow
+    port: '22'
+    src: 10.132.122.220
+  tags:
+  - deploy_appserver
+  - deploy_database
+
+# Add bastion public key to ensure connection
+- name: Add bastion public key
+  lineinfile:
+    path: /home/bitsalt/.ssh/authorized_keys
+    line: "{{ bastion_public_key }}"
+  tags:
+  - deploy_appserver
+  - deploy_database
+
+
+# /etc/hosts file
+- name: Edit etc/hosts file 
+  lineinfile:
+    path: /etc/hosts
+  loop: "{{ etc_host_lines }}"
+  when:
+    - etc_host_lines is defined
+  tags:
+  - etc_hosts
+
+# Certbot
+- name: Request SSL cert
+  cmd: "certbot --nginx --no-redirect -d {{ host.url }}"
+  notify: restart nginx
+  tags:
+  - deploy
+
+#Tests
+- name: Test bastion public key
+  debug:
+    msg: "{{ bastion_public_key }}"
+  tags:
+  - test
+
+- name: Test certbot values
+  debug:
+    msg: "certbot --nginx -d {{ host.url }}"
+  tags:
+  - test

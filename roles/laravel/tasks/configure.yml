@@ -1,0 +1,33 @@
+---
+# Publish .env configuration file
+
+- name: Publish .env file 
+  template:
+    src: env.j2
+    dest: "{{ host.conf_file }}"
+
+    
+# The template has no value set for the APP_KEY value, so
+# a unique one must be set here.
+- name: Refresh the app_key value in .env file 
+  command:
+    chdir: "{{ host.webroot }}"
+    cmd: './artisan key:generate'
+
+- name: Set initial permissions on storage directory
+  become: yes
+  file:
+    dest: "{{ host.webroot }}/storage"
+    owner: "{{ permissions.owner }}"
+    group: "{{ permissions.group }}"
+    mode: "{{ permissions.mode }}"
+    recurse: yes
+  tags:
+  - new_site
+
+# - name: Set SELINUX permissions on storage directory
+#   command:
+#     chdir: "{{ host.webroot }}"
+#     cmd: 'chcon -R -t httpd_sys_rw_content_t storage'
+#   tags:
+#   - new_site

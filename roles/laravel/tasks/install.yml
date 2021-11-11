@@ -1,0 +1,25 @@
+---
+# Pull files from repository
+
+- name: Create webroot dir
+  become: yes
+  ansible.builtin.file:
+    path: "{{ host.webroot }}"
+    state: directory
+    owner: "{{ permissions.owner }}"
+    group: "{{ permissions.group }}"
+    mode: "{{ permissions.mode }}"
+
+# Pseudo idempotence...
+- name: Check for previous install
+  stat:
+    path: "{{ host.webroot }}/composer.json"
+  register: laravel_composer_json
+
+- name: Install new Laravel instance with composer
+  become: yes
+  community.general.composer:
+    command: create-project 
+    arguments: laravel/laravel {{ host.webroot }}
+    working_dir: "{{ host.webroot }}"
+  when: not laravel_composer_json.stat.exists

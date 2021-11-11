@@ -1,0 +1,7 @@
+---
+# handlers file for laravel
+
+- name: composer update
+  community.general.composer:
+    working_dir: "{{ host.webroot }}"
+    command: update

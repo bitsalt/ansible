@@ -1,0 +1,52 @@
+---
+# tasks file for wordpress
+
+# WordPress Configuration
+- name: Set ownership
+  file:
+    path: "/var/www/{{ host.webroot }}"
+    state: directory
+    recurse: yes
+    owner: www-data
+    group: www-data
+    mode: '0770'
+  tags:
+    - deploy
+
+# - name: Set permissions for directories
+#   shell: "/usr/bin/find /var/www/{{ host.webroot }}/ -type d -exec chmod 750 {} \\;"
+#   tags:
+#     - deploy
+
+# - name: Set permissions for files
+#   shell: "/usr/bin/find /var/www/{{ host.webroot }}/ -type f -exec chmod 640 {} \\;"
+#   tags:
+#     - deploy
+
+- name: Download and unpack latest WordPress
+  unarchive:
+    src: "https://wordpress.org/latest.tar.gz"
+    dest: "/var/www/{{ host.url }}"
+    remote_src: yes
+    creates: "/var/www/{{ host.url }}"
+  tags:
+    - deploy
+
+- name: Set up wp-config
+  template:
+    src: "files/wp-config.php.j2"
+    dest: "/var/www/{{ host.webroot }}/wp-config.php"
+  tags:
+    - deploy
+
+- name: Pre-launch debug - host
+  debug:
+    var: host
+  tags:
+    - test
+
+- name: Pre-launch debug - PHP modules
+  debug:
+    var: php_modules
+  tags:
+    - test
