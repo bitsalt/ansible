@@ -1,0 +1,67 @@
+---
+# testing file to work out any issues
+# There are required variable to pass in (as of now, anyway). Do
+# this by adding to the ansible-playbook command this info, using the
+# bastion group as an example:
+# -e "host_name=bastion site_file=mysticalbookshop.yml"
+
+- hosts: local
+  connection: local
+  gather_facts: false
+  strategy: debug
+  become: no
+  vars_files:
+    - ./secrets.yml
+    - "./sites/{{ site_file }}"
+
+  tasks:
+  - name: Check a secret
+    debug:
+      msg: "Harmless secret: {{ github_user }}"
+
+  - name: Check passed in variable
+    debug:
+      var: host_name
+
+  - name: Check multiple passed-in variables
+    debug:
+      var: site_file
+
+  - name: Check display of list object
+    debug:
+      var: item
+    with_indexed_items: "{{ test_group_ips }}"
+    when:
+      - test_group_ips is defined
+
+  - name: Check display of specific item in list object 
+    debug:
+      msg: "IPs: {{ item[1] }}"
+    with_indexed_items: "{{ test_group_ips }}"
+    when:
+      - test_group_ips is defined
+
+  - name: Check use of tags
+    debug:
+      msg: "This should be the only play shown with either of the given tags"
+    tags: 
+      - test
+      - live
+
+  - name: Check site file vars 
+    debug:
+      var: database
+
+  - name: Check single site file var
+    debug:
+      var: database.mysql_password
+
+  - name: Check Nginx dependency loop list
+    debug:
+      msg: "Item: {{ item }}"
+    loop: "{{ nginx_dependencies }}"
+    when:
+      - nginx_dependencies is defined
+    
+    # msg: "IPs: {{ item.key }} = {{ item.value }} "
+    # with_dict: "{{ test_group_ips }}"
