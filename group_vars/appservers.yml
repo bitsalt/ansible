@@ -1,0 +1,42 @@
+---
+# Group vars
+
+etc_host_lines:
+  - "157.245.14.169 bitsalt.bastion"
+
+server_dependencies:
+  - fail2ban
+  - certbot
+  - python3-certbot-nginx
+  - mariadb-client
+  - python3-pymysql
+
+nginx_dependencies:
+  - nginx
+  - mysql-client
+  - python3-mysql
+  - php-fpm
+  - php-mysql
+
+php_modules:
+  - php-curl
+  - php-cli
+  - php-fpm
+  - php-json
+  - php-pdo
+  - php-mysql
+  - php-gd
+  - php-mbstring
+  - php-xml
+  - php-xmlrpc
+  - php-pear
+  - php-bcmath
+  - php-intl
+  - php-zip
+
+#   138.197.59.39 bitsalt.app01
+# 45.55.122.176 bitsalt.app02
+# 167.172.20.70 bitsalt.mysql01
+# 157.245.14.169 bitsalt.bastion
+# 142.93.64.130 bitsalt.xfiles
+# 174.138.38.61 lessonbank

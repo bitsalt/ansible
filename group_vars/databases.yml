@@ -1,0 +1,11 @@
+---
+# Group vars
+
+server_dependencies:
+  - fail2ban
+  - certbot
+  - python3-certbot-nginx
+  - mariadb-server
+  - python3-pymysql
+  - software-properties-common 
+  - awscli

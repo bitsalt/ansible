@@ -1,0 +1,40 @@
+---
+# Vars specific to this site
+
+# Permissions
+permissions:
+  owner: www-data
+  group: bitsalt
+  mode: '0775'
+
+# MySQL Settings
+database:
+  mysql_connection: mysql
+  mysql_host: bitsalt-mysql01
+  mysql_database: bitsalt_qr_code
+  mysql_user: bitsalt_qr_usr
+  mysql_password: '4SilfpR#P3tKgobq-GkaK5Y'
+
+# HTTP Settings
+host:
+  url: "https://qr.bitsalt.com"
+  webroot: "/var/www/qr.bitsalt.com"
+  conf_file: "qr.bitsalt.com.conf"
+  port: "443"
+
+# Packages/Libraries
+# composer_path: ** Not needed on bitsalt-app02...binary installed---
+
+# Framework-specific settings
+framework: Laravel
+config:
+  app_name: BitSalt QR Code Management
+  app_env: prod
+  app_debug: 'false'
+  app_url: 'https://qr.bitsalt.com'
+  mail_host: 'smtp'
+  mail_port: 25
+  
+# Repository settings
+git:
+  repo:

@@ -1,0 +1,15 @@
+---
+# Site vars for testing
+
+#MySQL Settings
+database:
+  mysql_db: test_db_name
+  mysql_user: test_db_usr
+  mysql_password: 'testPassword-94902ksK'
+
+#HTTP Settings
+host:
+  url: "test.bitsalt.com"
+  webroot: "test_bitsalt_com"
+  conf_file: "test.bitsalt.conf"
+  port: "443"

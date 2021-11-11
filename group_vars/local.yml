@@ -1,0 +1,29 @@
+---
+# Group vars - primarily for testing purposes
+
+test_group_ips:
+  - 127.0.0.1
+  - 192.168.0.1
+  - 10.10.0.1
+
+etc_host_lines:
+  - "138.197.59.39  bitsalt.app01"
+  - "45.55.122.176  bitsalt.app02"
+
+nginx_dependencies:
+  - nginx
+  - mysql-client
+  - python3-mysql
+  - php-fpm
+  - php-mysql
+
+# This needs to be reviewed
+php_modules:
+  - php-curl
+  - php-gd
+  - php-mbstring
+  - php-xml
+  - php-xmlrpc
+  - php-soap
+  - php-intl
+  - php-zip
