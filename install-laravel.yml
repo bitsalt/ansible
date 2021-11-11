@@ -1,0 +1,13 @@
+---
+# Install new wordpress site
+
+- hosts: "{{ host_name }}"
+  vars_files:
+    - ./secrets.yml
+    - "./sites/{{ site_file }}.yml"
+  
+  roles:
+    - role: laravel
+    - role: nginx
+      tags:
+        - deploy

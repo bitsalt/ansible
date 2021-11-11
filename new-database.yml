@@ -1,0 +1,36 @@
+---
+# Create new database table and configure user
+
+- hosts: databases
+  become: yes
+  vars_files:
+    - ./secrets.yml
+    - "./sites/{{ site_file }}"
+
+  tasks:
+  - name: Create database
+    mysql_db:
+      name: "{{ database.mysql_db }}"
+      state: present
+      login_host: bitsalt.mysql01
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+    tags: 
+      - mysql
+
+  - name: Create MySQL user for WordPress
+    mysql_user:
+      name: "{{ database.mysql_user }}"
+      password: "{{ database.mysql_password }}"
+      priv: "{{ database.mysql_db }}.*:ALL"
+      state: present
+      login_user: root
+      login_password: "{{ mysql_root_password }}"
+    tags: 
+      - mysql
+
+  - name: Pre-launch debug - database
+    debug:
+      var: database
+    tags:
+      - test

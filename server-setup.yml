@@ -1,0 +1,18 @@
+---
+# Initial server setup ( or sanity check for existing )
+
+- hosts: "{{ host_name }}"
+  become: yes
+  vars_files:
+    - ./secrets.yml
+
+  tasks:
+  - name: Install basic software set 
+    apt:
+      pkg: "{{ item }}"
+    loop: "{{ server_dependencies }}"
+    when:
+      - server_dependencies is defined
+    tags:
+      - deploy
+
