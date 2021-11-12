@@ -1,0 +1,16 @@
+---
+# Tasks related to a particular MySql database
+
+- name: Create new database
+  community.mysql.mysql_db:
+    name: "{{ database.mysql_database }}"
+    state: present
+
+# Maybe complete this later
+# - name: Dump multiple databases
+#   community.mysql.mysql_db:
+#     state: dump
+#     name:
+#       - db_1
+#       - db_2
+#     target: /tmp/dump.sql

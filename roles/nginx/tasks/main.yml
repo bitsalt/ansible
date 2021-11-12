@@ -2,22 +2,25 @@
 # tasks file for nginx
 
 - name: Write new site conf file
+  become: yes
   template:
-    dest: "/etc/nginx/sites-available/{{ host.url }}.conf"
+    dest: "/etc/nginx/sites-available/{{ host.name }}.conf"
     src: nginx.conf.j2
   tags:
-    - deploy
+    - new_site
 
 - name: Make symlink to site conf file
+  become: yes
   file:
-    src: "/etc/nginx/sites-available/{{ host.url }}.conf"
-    dest: "/etc/nginx/sites-enabled/{{ host.url }}.conf"
+    src: "/etc/nginx/sites-available/{{ host.name }}.conf"
+    dest: "/etc/nginx/sites-enabled/{{ host.name }}.conf"
     state: link
   tags:
-    - deploy
+    - new_site
   notify: restart nginx
 
 - name: Install Nginx
+  become: yes
   apt:
     name: "{{ item }}"
     update_cache: yes
@@ -28,6 +31,7 @@
     - install
 
 - name: Nginx custom configuration
+  become: yes
   file: 
     src: files/nginx.conf.j2
     dest: /etc/nginx/nginx.conf

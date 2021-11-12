@@ -1,0 +1,11 @@
+---
+# tasks file for a MySQL instance
+
+- include: install.yml
+
+- include: database.yml
+
+- include: user.yml
+
+# TODO: ...maybe
+#- name: Import existing data

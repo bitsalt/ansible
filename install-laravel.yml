@@ -7,7 +7,7 @@
     - "./sites/{{ site_file }}.yml"
   
   roles:
+    - role: mysqlDB
     - role: laravel
     - role: nginx
-      tags:
-        - deploy
+    

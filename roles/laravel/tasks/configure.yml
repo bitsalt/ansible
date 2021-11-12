@@ -4,7 +4,7 @@
 - name: Publish .env file 
   template:
     src: env.j2
-    dest: "{{ host.conf_file }}"
+    dest: "{{ host.name }}"
 
     
 # The template has no value set for the APP_KEY value, so

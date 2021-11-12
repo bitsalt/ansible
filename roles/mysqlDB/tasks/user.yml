@@ -1,0 +1,10 @@
+---
+# Tasks for database user management
+
+- name: Create database user with all privileges on a database
+  community.mysql.mysql_user:
+    name: "{{ database.mysql_user }}"
+    password: "{{ database.mysql_password }}"
+    host: "{{ database.mysql_host }}"
+    priv: "{{ database.mysql_database }}.*:ALL"
+    state: present

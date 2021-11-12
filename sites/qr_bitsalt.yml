@@ -17,9 +17,9 @@ database:
 
 # HTTP Settings
 host:
+  name: qr.bitsalt.com
   url: "https://qr.bitsalt.com"
   webroot: "/var/www/qr.bitsalt.com"
-  conf_file: "qr.bitsalt.com.conf"
   port: "443"
 
 # Packages/Libraries
