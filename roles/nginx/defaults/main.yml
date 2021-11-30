@@ -1,4 +1,3 @@
----
 # defaults file for nginx
 enabled_sites:
   - lessonbank:

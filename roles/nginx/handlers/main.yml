@@ -1,8 +1,15 @@
 ---
 # handlers file for nginx
 
+- name: Test nginx configuration 
+  ansible.builtin.shell:
+    cmd: nginx -t 
+  register: nginx_test_config
+  listen: "restart nginx"
+
 - name: restart nginx
-  become: yes
   service:
     name: nginx
     state: restarted
+  when: nginx_test_config.rc == 0
+  listen: "restart nginx"

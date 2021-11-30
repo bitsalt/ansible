@@ -12,20 +12,16 @@
   become: no
   vars_files:
     - ./secrets.yml
-    - "./sites/{{ site_file }}"
+    - ./sites/{{ site_file }}.yml
 
   tasks:
   - name: Check a secret
     debug:
       msg: "Harmless secret: {{ github_user }}"
 
-  - name: Check passed in variable
+  - name: Check host_vars variables
     debug:
-      var: host_name
-
-  - name: Check multiple passed-in variables
-    debug:
-      var: site_file
+      var: etc_host_lines
 
   - name: Check display of list object
     debug:
@@ -51,10 +47,12 @@
   - name: Check site file vars 
     debug:
       var: database
+    when: site_file is defined
 
   - name: Check single site file var
     debug:
       var: database.mysql_password
+    when: site_file is defined
 
   - name: Check Nginx dependency loop list
     debug:

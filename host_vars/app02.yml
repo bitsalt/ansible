@@ -1,0 +1,12 @@
+# Vars specific to app02
+
+domains:
+  - bitsalt:
+      url: bitsalt.com
+      reg_url: bitsalt_com
+  - qr_bitsalt:
+      url: qr.bitsalt.com
+      reg_url: qr_bitsalt_com
+  - acct_bitsalt:
+      url: acct.bitsalt.com
+      reg_url: acct_bitsalt_com

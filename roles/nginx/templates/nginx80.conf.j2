@@ -1,0 +1,30 @@
+server {
+    listen      80;
+    listen      [::]:80;
+
+	server_name {{ host.name }};
+
+	root {{ host.webroot }};
+	index index.php index.html;
+
+    # logging
+    access_log /var/log/nginx/{{ host.name }}.access.log;
+    error_log  /var/log/nginx/{{ host.name }}.error.log warn;
+
+    # index.php
+    index      index.php;
+
+    # index.php fallback
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # additional config
+    include nginxconfig.io/general.conf;
+
+    # handle .php
+    location ~ \.php$ {
+        fastcgi_pass unix:/var/run/php/php-fpm.sock;
+        include      nginxconfig.io/php_fastcgi.conf;
+    }
+}

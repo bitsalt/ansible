@@ -1,0 +1,15 @@
+# Update tasks for nginx
+
+- name: Check for SSL certs in proper location
+  ansible.builtin.stat:
+    path: "{{ ssl.letsencrypt_live_dir }}/{{ host.name }}"
+  register: certs_dir
+  tags: update
+
+- name: Write site conf file after SSL certs acquired
+  template:
+    dest: "/etc/nginx/sites-available/{{ host.name }}.conf"
+    src: nginx443.conf.j2
+  notify: restart nginx
+  when: certs_dir.stat.exists and certs_dir.stat.isdir
+  tags: update

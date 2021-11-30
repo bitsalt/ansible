@@ -2,14 +2,14 @@ server {
 	listen 443 ssl http2;
 	listen [::]:443 ssl http2;
 
-	server_name {{ host.url }};
+	server_name {{ host.name }};
 
-	root /var/www/{{ host.webroot }};
+	root {{ host.webroot }};
 	index index.php index.html;
 
-    ssl_certificate /etc/letsencrypt/live/{{ host.url }}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/{{ host.url }}/privkey.pem;
-    ssl_trusted_certificate /etc/letsencrypt/live/{{ host.url }}/chain.pem;
+    ssl_certificate /etc/letsencrypt/live/{{ host.name }}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/{{ host.name }}/privkey.pem;
+    ssl_trusted_certificate /etc/letsencrypt/live/{{ host.name }}/chain.pem;
 
     # security
     include                 nginxconfig.io/security.conf;
@@ -20,8 +20,8 @@ server {
     }
 
     # logging
-    access_log /var/log/nginx/{{ host.url }}.access.log;
-    error_log  /var/log/nginx/{{ host.url }}.error.log warn;
+    access_log /var/log/nginx/{{ host.name }}.access.log;
+    error_log  /var/log/nginx/{{ host.name }}.error.log warn;
 
     # index.php
     index      index.php;
@@ -46,11 +46,11 @@ server {
 server {
     listen      80;
     listen      [::]:80;
-    server_name {{ host.url }};
+    server_name {{ host.name }};
     include     nginxconfig.io/letsencrypt.conf;
 
     location / {
-        return 301 https://{{ host.url }}$request_uri;
+        return 301 {{ host.url }}$request_uri;
     }
 
 }

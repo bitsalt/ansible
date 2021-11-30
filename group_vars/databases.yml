@@ -1,6 +1,10 @@
 ---
 # Group vars
 
+etc_host_lines:
+  - "{{ internal_ip.bastion }} bastion.bitsalt.com"
+  - "{{ internal_ip.app01 }} app01.bitsalt.com"
+  - "{{ internal_ip.app02 }} app02.bitsalt.com"
 server_dependencies:
   - fail2ban
   - certbot

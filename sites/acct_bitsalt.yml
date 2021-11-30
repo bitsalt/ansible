@@ -2,23 +2,24 @@
 
 # Permissions
 permissions:
-  owner: www-data
-  group: bitsalt
+  owner: bitsalt
+  group: www-data
   mode: '0775'
 
 # MySQL Settings
 database:
   mysql_connection: mysql
   mysql_host: bitsalt-mysql01
-  mysql_database: bitsalt_qr_code
-  mysql_user: bitsalt_qr_usr
-  mysql_password: '4SilfpR#P3tKgobq-GkaK5Y'
+  mysql_database: acct_bitsalt
+  mysql_user: prodbits_acct
+  mysql_password: 'E4L8n9Q4nDy3wfFkSEmeaWN84aU27E'
 
 # HTTP Settings
 host:
-  name: qr.bitsalt.com
-  url: "https://qr.bitsalt.com"
-  webroot: "/var/www/qr.bitsalt.com"
+  name: acct.bitsalt.com
+  reg_name: acct_bitsalt_com
+  url: "https://acct.bitsalt.com"
+  webroot: "/var/www/acct.bitsalt.com"
   port: "443"
 
 # Packages/Libraries
@@ -27,13 +28,13 @@ host:
 # Framework-specific settings
 framework: Laravel
 config:
-  app_name: BitSalt QR Code Management
+  app_name: BitSalt Accounting
   app_env: prod
   app_debug: 'false'
-  app_url: 'https://qr.bitsalt.com'
+  app_url: 'https://acct.bitsalt.com'
   mail_host: 'smtp'
   mail_port: 25
   
 # Repository settings
-git:
-  repo:
+repo:
+  url: 'git@github.com:bitsalt/accounting.git'

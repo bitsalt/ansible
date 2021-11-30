@@ -1,0 +1,6 @@
+---
+etc_host_lines:
+  - "{{ external_ip.app01 }} app01.bitsalt.com"
+  - "{{ external_ip.app02 }} app02.bitsalt.com"
+  - "{{ external_ip.mysql01 }} mysql01.bitsalt.com"
+  - "{{ external_ip.bastion }} bastion.bitsalt.com"

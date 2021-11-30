@@ -1,22 +1,24 @@
----
-# Install Nginx and related software
+# Install tasks for nginx
 
-- hosts: "{ hostname }"
-  include_vars:
-  sudo: yes
-  tasks:
-  - name: Install Nginx
-    apt:
-      name: "{ item }"
-      update_cache: yes
-      state: latest
-      loop:
-        - nginx
-        - mysql-client
-        - python3-mysql
-        - php-fpm
-        - php-mysql
-  - name: Nginx custom configuration
-    file: 
-      src: files/nginx.conf.j2
-      dest: /etc/nginx/nginx.conf
+- name: Install Nginx
+  become: yes
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    state: latest
+  loop:
+      "{{ nginx_dependencies }}"
+  tags: install
+
+- name: Nginx custom configuration
+  file: 
+    src: files/nginx.conf.j2
+    dest: /etc/nginx/nginx.conf
+  notify: restart nginx
+  tags: install
+    
+- name: Test nginx launch site
+  debug:
+    var: host
+  tags:
+    - test

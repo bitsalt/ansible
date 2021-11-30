@@ -1,5 +1,8 @@
 ---
-# Group vars - primarily for testing purposes
+# Group vars - many for testing purposes, but
+# some are related to local dev environment setup.
+
+php_version: "7.4-fpm"
 
 test_group_ips:
   - 127.0.0.1
@@ -7,8 +10,10 @@ test_group_ips:
   - 10.10.0.1
 
 etc_host_lines:
-  - "138.197.59.39  bitsalt.app01"
-  - "45.55.122.176  bitsalt.app02"
+  - "{{ internal_ip.app01 }} app01.bitsalt.com"
+  - "{{ internal_ip.app02 }} app02.bitsalt.com"
+  - "{{ internal_ip.mysql01 }} mysql01.bitsalt.com"
+  - "{{ internal_ip.bastion }} bastion.bitsalt.com"
 
 nginx_dependencies:
   - nginx

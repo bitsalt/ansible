@@ -16,9 +16,30 @@
     path: "{{ host.webroot }}/composer.json"
   register: laravel_composer_json
 
+- name: Install from repo
+  ansible.builtin.git:
+    repo: "{{ repo.url }}"
+    dest: "{{ host.webroot }}"
+  register: git_pull
+  when: not laravel_composer_json.stat.exists
+
+# Pseudo idempotence...
+- name: Check for previous install...again
+  stat:
+    path: "{{ host.webroot }}/composer.json"
+  register: laravel_composer_json_2
+
 - name: Install new Laravel instance with composer
   community.general.composer:
     command: create-project 
     arguments: laravel/laravel {{ host.webroot }}
     working_dir: "{{ host.webroot }}"
-  when: not laravel_composer_json.stat.exists
+  when: not laravel_composer_json.stat.exists and not laravel_composer_json_2.stat.exists
+
+- name: Set correct permissions
+  ansible.builtin.file:
+    path: "{{ host.webroot }}"
+    state: directory
+    recurse: yes
+    owner: "{{ permissions.owner }}"
+    group: "{{ permissions.group }}"

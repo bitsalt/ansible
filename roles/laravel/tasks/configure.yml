@@ -1,18 +1,25 @@
----
-# Publish .env configuration file
+- name: Make artisan file executable
+  ansible.builtin.file:
+    path: "{{ host.webroot }}/artisan"
+    mode: 0774
 
+- name: Install composer packages
+  ansible.builtin.shell:
+    chdir: "{{ host.webroot }}"
+    cmd: 'composer install'
+
+# Publish .env configuration file
 - name: Publish .env file 
   template:
     src: env.j2
-    dest: "{{ host.name }}"
+    dest: "{{ host.webroot }}/.env"
 
-    
 # The template has no value set for the APP_KEY value, so
 # a unique one must be set here.
-- name: Refresh the app_key value in .env file 
-  command:
+- name: Refresh the damn app_key value in .env file! 
+  ansible.builtin.shell:
     chdir: "{{ host.webroot }}"
-    cmd: './artisan key:generate'
+    cmd: 'php artisan key:generate'
 
 - name: Set initial permissions on storage directory
   become: yes
