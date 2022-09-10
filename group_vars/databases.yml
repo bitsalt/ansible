@@ -1,15 +1,26 @@
 ---
 # Group vars
 
-etc_host_lines:
-  - "{{ internal_ip.bastion }} bastion.bitsalt.com"
-  - "{{ internal_ip.app01 }} app01.bitsalt.com"
-  - "{{ internal_ip.app02 }} app02.bitsalt.com"
 server_dependencies:
   - fail2ban
   - certbot
   - python3-certbot-nginx
   - mariadb-server
   - python3-pymysql
-  - software-properties-common 
+  - software-properties-common
   - awscli
+
+# Existing databases
+databases:
+  - acct_bitsalt
+  - bitsalt
+  - jeffmoser
+  - jumpstc8_main
+  - kyaepl_prod
+  - kyskillsupl
+  - lessonbank
+  - saltfin
+  - seaisland
+  - studbook_nas
+  - taotedev
+  - yourls

@@ -2,8 +2,7 @@
 # Group vars
 
 etc_host_lines:
-  - "{{ internal_ip.bastion }} bastion.bitsalt.com"
-  - "{{ internal_ip.mysql01 }} mysql01.bitsalt.com"
+  - "157.245.14.169 bitsalt.bastion"
 
 server_dependencies:
   - fail2ban
@@ -34,19 +33,6 @@ php_modules:
   - php-bcmath
   - php-intl
   - php-zip
-
-ssl:
-  acme_challenge_type: http-01
-  acme_directory: https://acme-v02.api.letsencrypt.org/directory
-  acme_version: 2
-  acme_email: jeff@bitsalt.com
-  letsencrypt_live_dir: /etc/letsencrypt/live
-  letsencrypt_dir: /etc/letsencrypt
-  letsencrypt_keys_dir: /etc/letsencrypt/keys
-  letsencrypt_csrs_dir: /etc/letsencrypt/csr
-  letsencrypt_certs_dir: /etc/letsencrypt/certs
-  letsencrypt_account_key: /etc/letsencrypt/account/account.key
-  #letsencrypt_account_uri: https://acme-v02.api.letsencrypt.org/acme/acct/118997876
 
 #   138.197.59.39 bitsalt.app01
 # 45.55.122.176 bitsalt.app02

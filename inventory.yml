@@ -1,0 +1,29 @@
+all:
+  hosts:
+    app01.bitsalt.com:
+      ansible_host: 138.197.59.39
+    app02.bitsalt.com:
+      ansible_host: 45.55.122.176
+    app03.bitsalt.com:
+      ansible_host: 134.209.32.75
+    devworks:
+      ansible_host: 192.168.68.133
+    mysql01.bitsalt.com:
+      ansible_host: 167.172.20.70
+    bastion.bitsalt.com:
+      ansible_host: 157.245.14.169
+
+appservers:
+  hosts:
+    app01.bitsalt.com:
+    app02.bitsalt.com:
+    app03.bitsalt.com:
+
+databases:
+  hosts:
+    mysql01.bitsalt.com:
+    localhost:
+
+development:
+  hosts:
+    devworks:
