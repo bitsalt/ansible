@@ -27,3 +27,26 @@ php_modules:
   - php-soap
   - php-intl
   - php-zip
+
+server_dependencies:
+  - fail2ban
+  - certbot
+  - python3-certbot-nginx
+  - mariadb-server
+  - python3-pymysql
+  - software-properties-common
+  - awscli
+
+# Existing databases
+databases:
+  - acctbitsalt
+  - bitsalt
+  - jeffmoser
+  - jumpstartfarm
+  - kyaeplprod
+  - lessonbank
+  - saltfin
+  - seaisland
+  - studbook
+  - taotedev
+  - yourls

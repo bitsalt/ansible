@@ -6,14 +6,13 @@
 
   vars_files:
     - ./secrets.yml
+    - ./group_vars/local.yml
 
   tasks:
-    # - name: Loop through databases
-    #   ansible.builtin.debug:
-    #     msg: "Databases: {{ databases }}"
-
     - name: List S3 buckets
       amazon.aws.s3_bucket:
-        name: "{{ item }}"
+        name: "bitsalt-{{ item }}"
         state: present
+        public_access: 
+          block_public_policy: yes
       loop: "{{ databases }}"
