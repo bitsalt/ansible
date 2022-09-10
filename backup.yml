@@ -9,10 +9,46 @@
     - ./group_vars/local.yml
 
   tasks:
-    - name: List S3 buckets
+    - name: Create S3 buckets
       amazon.aws.s3_bucket:
         name: "bitsalt-{{ item }}"
         state: present
+        versioning: yes
         public_access: 
-          block_public_policy: yes
+          block_public_acls: true
+          ignore_public_acls: true
       loop: "{{ databases }}"
+
+    - name: Dump databases for backup
+      community.mysql.mysqldb:
+        state: dump
+        name: "{{ item }}"
+        target: "/tmp/{{ item }}.sql"
+      loop: "{{ databases }}"
+
+    - name: Compress DB backup files
+      ansible.builtin.archive:
+        path: "/tmp/{{ item }}.sql"
+        dest: "/tmp/{{ item }}.tar.gz"
+        format: gz
+      loop: "{{ databases }}"
+        
+    - name: Push DB backup files to S3
+      amazon.aws.aws_s3:
+        bucket: "{{ item }}"
+        mode: put
+        object: "{{ item }}.tar.gz"
+        src: "/tmp/{{ item }}.tar.gz"
+        register: putresult
+      loop: "{{ databases }}"
+        
+    - debug:
+        msg: "{{ putresult.msg }} and  S3 URL {{ putresult.url }}"
+      when: putresult.changed
+
+    - name: Clean up DB dump files
+      ansible.builtin.file:
+        state: absent
+        path: "/tmp/{{ item }}.tar.gz"
+      loop: "{{ databases }}"
+
