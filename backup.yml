@@ -1,14 +1,28 @@
 ---
 - name: Backup databases to S3
-  hosts: localhost
-  become: false
-  gather_facts: false
+  hosts: databases
+  become: true
+  gather_facts: true
 
   vars_files:
     - ./secrets.yml
-    - ./group_vars/local.yml
 
   tasks:
+#    - name: Debug
+#      ansible.builtin.debug:
+#        msg: Connected to {{ inventory_hostname }} and using mysql login {{ mysql_root_password }}
+#      tags:
+#        - debug
+#        - never
+
+    - name: Install dependencies
+      ansible.builtin.pip:
+        name: "{{ item }}"
+      loop: "{{ python_dependencies }}"
+      tags:
+        - install
+        - never
+
     - name: Create S3 buckets
       amazon.aws.s3_bucket:
         name: "bitsalt-{{ item }}"
@@ -18,12 +32,19 @@
           block_public_acls: true
           ignore_public_acls: true
       loop: "{{ databases }}"
+      tags:
+        - install
+        - update
+        - never
 
     - name: Dump databases for backup
-      community.mysql.mysqldb:
+      community.mysql.mysql_db:
         state: dump
         name: "{{ item }}"
         target: "/tmp/{{ item }}.sql"
+        login_user: root
+        login_password: "{{ mysql_root_password }}"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
       loop: "{{ databases }}"
 
     - name: Compress DB backup files
@@ -35,20 +56,31 @@
         
     - name: Push DB backup files to S3
       amazon.aws.aws_s3:
-        bucket: "{{ item }}"
+        bucket: "bitsalt-{{ item }}"
         mode: put
         object: "{{ item }}.tar.gz"
         src: "/tmp/{{ item }}.tar.gz"
-        register: putresult
       loop: "{{ databases }}"
         
-    - debug:
-        msg: "{{ putresult.msg }} and  S3 URL {{ putresult.url }}"
-      when: putresult.changed
+    - name: Glob DB dump files
+      ansible.builtin.find:
+        paths: /tmp
+        patterns: '*.sql,*.tar.gz'
+      register: files_to_delete
 
-    - name: Clean up DB dump files
+    - name: Clean up globbed DB dump files
       ansible.builtin.file:
+        path: "{{ item.path }}"
         state: absent
-        path: "/tmp/{{ item }}.tar.gz"
-      loop: "{{ databases }}"
+      loop: "{{ files_to_delete.files }}"
+
+    - name: Remove S3 buckets of deleted databases
+      amazon.aws.s3_bucket:
+        name: "{{ item }}"
+        state: absent
+        force: true
+      loop: "{{ deleted_databases }}"
+      tags:
+        - update
+        - never
 

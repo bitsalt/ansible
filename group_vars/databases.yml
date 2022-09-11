@@ -10,17 +10,25 @@ server_dependencies:
   - software-properties-common
   - awscli
 
+python_dependencies:
+  - boto3
+  - PyMySQL
+
 # Existing databases
 databases:
-  - acct_bitsalt
+  - acctbitsalt
   - bitsalt
   - jeffmoser
-  - jumpstc8_main
-  - kyaepl_prod
-  - kyskillsupl
+  - jumpstartfarm
+  - kyaeplprod
   - lessonbank
   - saltfin
   - seaisland
-  - studbook_nas
+  - studbook
   - taotedev
   - yourls
+
+# Databases no longer used
+deleted_databases:
+  - kyskillsupl
+  - acctbitsalt
