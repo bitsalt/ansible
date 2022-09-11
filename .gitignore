@@ -2,3 +2,5 @@ ansible.cfg
 inventory
 inventory.yml
 ansible-examples
+archive
+bitsalt_ansible
