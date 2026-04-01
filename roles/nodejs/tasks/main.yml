@@ -1,0 +1,38 @@
+---
+# =============================================================================
+# Role: nodejs
+# Loops over nodejs_sites list defined in site.yml.
+# Each iteration deploys one Node.js site's directory, Compose file, and
+# Vault-sourced .env file.
+# =============================================================================
+
+- name: Create site directory
+  ansible.builtin.file:
+    path: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: directory
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0755"
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/docker-compose.yml"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0644"
+  notify: Restart nodejs site
+
+- name: Deploy .env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/.env"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0600"
+  notify: Restart nodejs site
+
+- name: Start Node.js site
+  community.docker.docker_compose_v2:
+    project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: present

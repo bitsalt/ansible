@@ -1,0 +1,16 @@
+---
+# =============================================================================
+# Site: node-site-1 (Node.js)
+# Copy for node-site-2 and adjust values.
+# =============================================================================
+
+site_name: node-site-1
+site_domain: nodesite1.com
+site_type: nodejs
+
+node_image: "yourdockerhub/node-site-1:latest"
+node_port: 3000
+node_env: production
+
+# Database — connects to DO managed PostgreSQL cluster
+node_db_url: "postgresql://node1_user:{{ vault_node_site_1_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/node_site_1?sslmode=require"

@@ -1,0 +1,7 @@
+---
+- name: Restart traefik
+  community.docker.docker_compose_v2:
+    project_src: "{{ proxy_dir }}"
+    state: present
+    pull: always
+    recreate: always

@@ -1,0 +1,6 @@
+---
+- name: Restart laravel site
+  community.docker.docker_compose_v2:
+    project_src: "{{ sites_base_dir }}/{{ laravel_site.site_name }}"
+    state: present
+    recreate: always

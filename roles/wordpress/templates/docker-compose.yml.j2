@@ -1,0 +1,20 @@
+---
+services:
+  wordpress:
+    image: {{ item.wp_image }}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.{{ item.site_name }}.rule=Host(`{{ item.site_domain }}`)"
+      - "traefik.http.routers.{{ item.site_name }}.entrypoints=websecure"
+      - "traefik.http.routers.{{ item.site_name }}.tls.certresolver=le"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: {{ docker_proxy_network }}
+    external: true
