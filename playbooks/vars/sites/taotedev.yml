@@ -1,0 +1,11 @@
+---
+taotedev_site:
+  enabled: true
+  site_name: taotedev
+  site_domain: taotedev.com
+  wp_image: "{{ wordpress_default_image }}"
+  wp_db_host: "{{ vault_mysql_host }}:{{ vault_mysql_port }}"
+  wp_db_name: taotedev
+  wp_db_user: devTaoist
+  wp_db_password: "{{ taotedev_db_password }}"
+  wp_table_prefix: wp_

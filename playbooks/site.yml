@@ -1,0 +1,100 @@
+---
+# =============================================================================
+# BitSalt — site.yml
+# Top-level playbook. Runs all roles in dependency order.
+#
+# Usage:
+#   Full run:
+#     ansible-playbook site.yml --ask-vault-pass
+#
+#   Limit to a specific role via tags:
+#     ansible-playbook site.yml --tags traefik
+#     ansible-playbook site.yml --tags wordpress
+#     ansible-playbook site.yml --tags laravel
+#     ansible-playbook site.yml --tags nodejs
+#
+#   Adding a new WordPress site:
+#     1. Copy vars/sites/taotedev.yml to vars/sites/new-client.yml
+#     2. Define the new <sitename>_site dict and fill in values
+#     3. Add its DB password to group_vars/all/vault.yml
+#     4. Add the var file to vars_files below
+#     5. Add "{{ <sitename>_site | default({}) }}" to _wordpress_site_candidates below
+#     6. Run: ansible-playbook site.yml --tags wordpress
+#
+# =============================================================================
+
+- name: BitSalt Droplet provisioning
+  hosts: droplet
+  become: true
+
+  vars_files:
+    # WordPress sites — one file per site; comment out to disable
+    - vars/sites/taotedev.yml
+    # - vars/sites/client-b.yml
+
+    # Laravel site — comment out if not deploying Laravel
+    - vars/sites/laravel-site.yml
+
+    # Node.js sites — one file per site; comment out to disable
+    - vars/sites/node-site-1.yml
+    # - vars/sites/node-site-2.yml
+
+  vars:
+    # Each candidate uses | default({}) so that commenting out a vars_file above
+    # produces an empty dict rather than an undefined variable error.
+    # The selectattr filter then drops any entries missing site_name.
+    _wordpress_site_candidates:
+      - "{{ taotedev_site | default({}) }}"
+      # - "{{ client_b_site | default({}) }}"
+    wordpress_sites: "{{ _wordpress_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
+
+    _nodejs_site_candidates:
+      - "{{ node_site_1 | default({}) }}"
+      # - "{{ node_site_2 | default({}) }}"
+    nodejs_sites: "{{ _nodejs_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
+
+    # laravel_site is defined in vars/sites/laravel-site.yml.
+    # Set laravel_site.enabled: true in that file when the site is ready to deploy.
+
+  roles:
+    - role: common
+      tags: [common]
+
+    - role: docker
+      tags: [docker]
+
+    - role: traefik
+      tags: [traefik]
+
+  tasks:
+    - name: Deploy WordPress sites
+      ansible.builtin.include_role:
+        name: wordpress
+        apply:
+          tags: [wordpress]
+      loop: "{{ wordpress_sites }}"
+      loop_control:
+        loop_var: item
+        label: "{{ item.site_name }}"
+      when: wordpress_sites | length > 0
+      tags: [wordpress]
+
+    - name: Deploy Laravel site
+      ansible.builtin.include_role:
+        name: laravel
+        apply:
+          tags: [laravel]
+      when: laravel_site is defined and laravel_site.enabled | default(false)
+      tags: [laravel]
+
+    - name: Deploy Node.js sites
+      ansible.builtin.include_role:
+        name: nodejs
+        apply:
+          tags: [nodejs]
+      loop: "{{ nodejs_sites }}"
+      loop_control:
+        loop_var: item
+        label: "{{ item.site_name }}"
+      when: nodejs_sites | length > 0
+      tags: [nodejs]

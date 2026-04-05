@@ -1,0 +1,30 @@
+---
+# =============================================================================
+# Global vars — non-sensitive
+# Sensitive values live in group_vars/all/vault.yml (Ansible Vault)
+# =============================================================================
+
+# Paths
+sites_base_dir: /opt/sites
+proxy_dir: /opt/proxy
+backup_dir: /opt/backups
+scripts_dir: /opt/scripts
+
+# Docker
+docker_proxy_network: proxy
+
+# Traefik
+traefik_image: traefik:v3.3
+traefik_acme_email: "{{ vault_traefik_acme_email }}"
+
+# WordPress defaults (can be overridden per site)
+wordpress_default_image: wordpress:6.9.4-php8.2-fpm
+
+# Deploy user (created manually — Ansible ensures dir structure only)
+deploy_user: deploy
+deploy_group: deploy
+
+# Site lists — overridden in site.yml; defined here so roles skip cleanly
+# when no sites are configured rather than failing on undefined variables.
+wordpress_sites: []
+nodejs_sites: []

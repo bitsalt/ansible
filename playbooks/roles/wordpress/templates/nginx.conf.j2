@@ -1,0 +1,25 @@
+server {
+    listen 80;
+    server_name {{ item.site_domain }} www.{{ item.site_domain }};
+    root /var/www/html;
+    index index.php;
+
+    # Pass all PHP to FPM
+    location ~ \.php$ {
+        fastcgi_pass wordpress:9000;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        fastcgi_param HTTP_HOST $host;
+    }
+
+    # WordPress pretty permalinks
+    location / {
+        try_files $uri $uri/ /index.php?$args;
+    }
+
+    # Deny access to sensitive files
+    location ~ /\.(ht|git|env) {
+        deny all;
+    }
+}

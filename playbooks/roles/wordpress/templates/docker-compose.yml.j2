@@ -1,0 +1,51 @@
+---
+services:
+  wordpress:
+    image: {{ item.wp_image }}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - wordpress_data:/var/www/html
+      - ./wp-content:/var/www/html/wp-content
+    networks:
+      - internal
+
+  nginx:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - wordpress_data:/var/www/html:ro
+      - ./wp-content:/var/www/html/wp-content:ro
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    labels:
+      - "traefik.enable=true"
+      # Explicit service definition so both routers can reference it by site name
+      - "traefik.http.services.{{ item.site_name }}.loadbalancer.server.port=80"
+      # Apex domain router
+      - "traefik.http.routers.{{ item.site_name }}.rule=Host(`{{ item.site_domain }}`)"
+      - "traefik.http.routers.{{ item.site_name }}.entrypoints=websecure"
+      - "traefik.http.routers.{{ item.site_name }}.tls.certresolver=le"
+      # www → apex redirect (permanent 301)
+      - "traefik.http.routers.{{ item.site_name }}-www.rule=Host(`www.{{ item.site_domain }}`)"
+      - "traefik.http.routers.{{ item.site_name }}-www.entrypoints=websecure"
+      - "traefik.http.routers.{{ item.site_name }}-www.tls.certresolver=le"
+      - "traefik.http.routers.{{ item.site_name }}-www.middlewares={{ item.site_name }}-www-redirect"
+      - "traefik.http.routers.{{ item.site_name }}-www.service={{ item.site_name }}"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.replacement=https://$$1"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.permanent=true"
+    networks:
+      - proxy
+      - internal
+    depends_on:
+      - wordpress
+
+volumes:
+  wordpress_data:
+
+networks:
+  proxy:
+    name: {{ docker_proxy_network }}
+    external: true
+  internal:
+    internal: true

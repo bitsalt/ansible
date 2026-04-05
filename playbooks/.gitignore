@@ -1,0 +1,11 @@
+# Never commit these
+group_vars/all/vault.yml   # encrypt with ansible-vault before committing if you must track it
+vars/sites/*.vault.yml
+*.retry
+.vault_pass
+.bitsalt_vault_pass
+
+# OS noise
+.DS_Store
+*.swp
+*.swo

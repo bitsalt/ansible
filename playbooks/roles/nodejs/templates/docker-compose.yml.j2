@@ -1,0 +1,29 @@
+---
+services:
+  app:
+    image: {{ item.node_image }}
+    restart: unless-stopped
+    env_file: .env
+    labels:
+      - "traefik.enable=true"
+      # Apex domain router
+      - "traefik.http.routers.{{ item.site_name }}.rule=Host(`{{ item.site_domain }}`)"
+      - "traefik.http.routers.{{ item.site_name }}.entrypoints=websecure"
+      - "traefik.http.routers.{{ item.site_name }}.tls.certresolver=le"
+      - "traefik.http.services.{{ item.site_name }}.loadbalancer.server.port={{ item.node_port }}"
+      # www → apex redirect (permanent 301)
+      - "traefik.http.routers.{{ item.site_name }}-www.rule=Host(`www.{{ item.site_domain }}`)"
+      - "traefik.http.routers.{{ item.site_name }}-www.entrypoints=websecure"
+      - "traefik.http.routers.{{ item.site_name }}-www.tls.certresolver=le"
+      - "traefik.http.routers.{{ item.site_name }}-www.middlewares={{ item.site_name }}-www-redirect"
+      - "traefik.http.routers.{{ item.site_name }}-www.service={{ item.site_name }}"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.replacement=https://$$1"
+      - "traefik.http.middlewares.{{ item.site_name }}-www-redirect.redirectregex.permanent=true"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    name: {{ docker_proxy_network }}
+    external: true

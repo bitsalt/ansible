@@ -1,0 +1,15 @@
+---
+laravel_site:
+  enabled: false        # set to true when image and credentials are ready
+  site_name: laravel-site
+  site_domain: laravelsite.com
+  laravel_image: "yourdockerhub/laravel-site:latest"
+  laravel_app_env: production
+  laravel_app_debug: "false"
+  laravel_app_key: "{{ vault_laravel_app_key }}"
+  laravel_db_host: "{{ vault_mysql_host }}"
+  laravel_db_port: "{{ vault_mysql_port }}"
+  laravel_db_name: laravel_site
+  laravel_db_user: laravel_user
+  laravel_db_password: "{{ vault_laravel_site_db_password }}"
+  laravel_queue_enabled: true

@@ -1,0 +1,40 @@
+---
+services:
+  app:
+    image: {{ laravel_site.laravel_image }}
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./storage:/var/www/html/storage
+    labels:
+      - "traefik.enable=true"
+      # Apex domain router
+      - "traefik.http.routers.{{ laravel_site.site_name }}.rule=Host(`{{ laravel_site.site_domain }}`)"
+      - "traefik.http.routers.{{ laravel_site.site_name }}.entrypoints=websecure"
+      - "traefik.http.routers.{{ laravel_site.site_name }}.tls.certresolver=le"
+      # www → apex redirect (permanent 301)
+      - "traefik.http.routers.{{ laravel_site.site_name }}-www.rule=Host(`www.{{ laravel_site.site_domain }}`)"
+      - "traefik.http.routers.{{ laravel_site.site_name }}-www.entrypoints=websecure"
+      - "traefik.http.routers.{{ laravel_site.site_name }}-www.tls.certresolver=le"
+      - "traefik.http.routers.{{ laravel_site.site_name }}-www.middlewares={{ laravel_site.site_name }}-www-redirect"
+      - "traefik.http.routers.{{ laravel_site.site_name }}-www.service={{ laravel_site.site_name }}"
+      - "traefik.http.middlewares.{{ laravel_site.site_name }}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+      - "traefik.http.middlewares.{{ laravel_site.site_name }}-www-redirect.redirectregex.replacement=https://$$1"
+      - "traefik.http.middlewares.{{ laravel_site.site_name }}-www-redirect.redirectregex.permanent=true"
+    networks:
+      - proxy
+
+{% if laravel_site.laravel_queue_enabled %}
+  queue:
+    image: {{ laravel_site.laravel_image }}
+    restart: unless-stopped
+    env_file: .env
+    command: php artisan queue:work --sleep=3 --tries=3
+    networks:
+      - proxy
+{% endif %}
+
+networks:
+  proxy:
+    name: {{ docker_proxy_network }}
+    external: true
