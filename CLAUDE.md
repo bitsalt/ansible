@@ -82,9 +82,15 @@ known good tag per site.
 ## WordPress update workflow
 
 - **Core updates:** bump image tag in `docker-compose.yml`, `docker compose pull && up -d`
-- **Plugin/theme updates:** WP-CLI via one-off container
+- **Plugin/theme updates:** WP-CLI via the `wordpress:cli` image (FPM images don't include `wp`)
   ```bash
-  docker compose run --rm wordpress wp plugin update --all --path=/var/www/html
+  docker run --rm \
+    --user www-data \
+    --volumes-from <site>-wordpress-1 \
+    --network container:<site>-wordpress-1 \
+    --env-file /opt/sites/<site>/.env \
+    wordpress:cli-php8.2 \
+    wp plugin update --all --path=/var/www/html
   ```
 
 ---

@@ -18,9 +18,10 @@
   ansible.builtin.file:
     path: "{{ sites_base_dir }}/{{ item.site_name }}/wp-content"
     state: directory
-    owner: "{{ deploy_user }}"
-    group: "{{ deploy_user }}"
+    owner: "33"
+    group: "33"
     mode: "0755"
+    recurse: true
 
 - name: Deploy nginx.conf
   ansible.builtin.template:
@@ -45,6 +46,14 @@
     owner: "{{ deploy_user }}"
     group: "{{ deploy_user }}"
     mode: "0600"
+  register: env_result
+
+- name: Remove site (with volumes) when .env changes so wp-config.php is regenerated
+  community.docker.docker_compose_v2:
+    project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: absent
+    remove_volumes: true
+  when: env_result.changed
 
 - name: Start WordPress site
   community.docker.docker_compose_v2:

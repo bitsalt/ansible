@@ -1,0 +1,11 @@
+---
+seaislandlife_site:
+  enabled: true
+  site_name: seaislandlife
+  site_domain: seaislandlife.com
+  wp_image: "{{ wordpress_default_image }}"
+  wp_db_host: "{{ vault_mysql_host }}:{{ vault_mysql_port }}"
+  wp_db_name: seaisland
+  wp_db_user: seaisland
+  wp_db_password: "{{ seaislandlife_db_password }}"
+  wp_table_prefix: sea_

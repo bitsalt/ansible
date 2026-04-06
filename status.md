@@ -1,6 +1,6 @@
 # BitSalt Ansible — Project Status
 
-Last updated: 2026-04-05
+Last updated: 2026-04-06
 
 ---
 
@@ -47,21 +47,16 @@ The following containers are running on the Droplet:
 | `proxy-traefik-1` | traefik:v3.3 | Up |
 | `proxy-socket-proxy-1` | nginx:alpine | Up |
 
-**Outstanding issue:** Gateway timeout when loading taotedev.com. nginx is up and routing requests, but FPM is not responding. Last diagnostic showed nginx may not be able to reach the `wordpress` container — suspected cause is the `internal` network name not matching between the two containers, or the FPM container having been recreated without the nginx container being on the same network at that point.
-
-**Not yet confirmed:**
-- SSL certificate has not been issued (Let's Encrypt TLS challenge cannot complete until the site is reachable)
-- The `taotedev_internal` or `proxy_internal` network membership for both containers has not been verified
+**taotedev.com is fully live.** WordPress loads, plugins are up to date, and SSL cert is issued via Let's Encrypt/Traefik.
 
 ---
 
 ## What still needs to be done
 
 ### Immediate — taotedev.com
-- [ ] Confirm both `taotedev-nginx-1` and `taotedev-wordpress-1` are on the same `internal` network (`docker network inspect`)
-- [ ] Resolve gateway timeout (nginx → FPM connection)
-- [ ] Confirm SSL cert is issued after site becomes reachable
-- [ ] Verify WordPress site loads correctly and wp-content files are in place
+- [x] Resolve gateway timeout (nginx → FPM connection)
+- [x] Verify WordPress site loads correctly and wp-content files are in place
+- [x] Confirm SSL cert is issued (Let's Encrypt via Traefik)
 
 ### Ansible / infrastructure
 - [ ] Backup cron role — MySQL + PostgreSQL dumps to DO Spaces, 14-day local / 90-day Spaces retention (deferred from initial scope)
@@ -84,6 +79,19 @@ The following containers are running on the Droplet:
 - [ ] DO Monitoring agent enabled, CPU/disk alerts configured in dashboard
 
 ---
+
+## Key decisions and lessons learned
+
+- **DO Managed MySQL `internal: true` cuts external DNS** — the WordPress FPM container must NOT be on a Docker network with `internal: true` when it connects to DO Managed MySQL. That flag blocks all external routing including DNS resolution.
+- **DO Managed MySQL requires SSL** — add `WORDPRESS_CONFIG_EXTRA=define("MYSQL_CLIENT_FLAGS", MYSQLI_CLIENT_SSL);` to the `.env`. Use double quotes; single quotes are rejected by the WordPress entrypoint.
+- **DO Managed MySQL trusted sources** — the Droplet must be added to the DB cluster's trusted sources in the DO dashboard or connections are silently dropped.
+- **`wp-content` must be owned by uid 33 (www-data)** — the bind-mounted wp-content dir must be `chown -R 33:33` on the host. Ansible task now uses `owner: "33"` with `recurse: true`.
+- **WP-CLI requires the `wordpress:cli-php8.2` image** — FPM images don't include `wp`. Use `--volumes-from` and `--network container:` flags to share the running container's context.
+- **`docker compose restart` does not re-read `.env`** — always use `docker compose up -d` to pick up env file changes.
+- **`WORDPRESS_CONFIG_EXTRA` is `eval()`d at runtime** — it does not appear as literal text in `wp-config.php`; that is expected behavior in newer WordPress images.
+- **Newer WordPress images use `getenv_docker()` in wp-config.php** — env vars like `WORDPRESS_TABLE_PREFIX` are read dynamically at runtime, not substituted as static values. `wp-config.php` will show `getenv_docker('WORDPRESS_TABLE_PREFIX', 'wp_')` — this is correct.
+- **Migrated sites: verify DB table prefix** — the `wp_table_prefix` in the site var file must match the prefix actually used in the existing database, not assumed to be the default `wp_`.
+- **Migrated sites: rsync wp-content from old server before going live** — the bind-mounted `wp-content` directory on the new server starts empty. Active theme, plugins, and uploads must be copied: `rsync -avz --chown=33:33 user@oldserver:/path/to/wp-content/ /opt/sites/<site>/wp-content/`. Verify no nested `wp-content/wp-content/` directory is created.
 
 ## Key decisions made during this session
 

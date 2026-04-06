@@ -30,6 +30,7 @@
   vars_files:
     # WordPress sites — one file per site; comment out to disable
     - vars/sites/taotedev.yml
+    - vars/sites/seaislandlife.yml
     # - vars/sites/client-b.yml
 
     # Laravel site — comment out if not deploying Laravel
@@ -45,6 +46,7 @@
     # The selectattr filter then drops any entries missing site_name.
     _wordpress_site_candidates:
       - "{{ taotedev_site | default({}) }}"
+      - "{{ seaislandlife_site | default({}) }}"
       # - "{{ client_b_site | default({}) }}"
     wordpress_sites: "{{ _wordpress_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
 
