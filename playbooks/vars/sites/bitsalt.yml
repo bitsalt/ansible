@@ -1,0 +1,9 @@
+---
+bitsalt:
+  enabled: true
+  site_name: bitsalt
+  site_domain: bitsalt.com
+  node_image: "bitsalt/bitsalt-prod:latest"
+  node_port: 4321
+  node_env: production
+  

@@ -38,7 +38,7 @@
 
     # Node.js sites — one file per site; comment out to disable
     - vars/sites/node-site-1.yml
-    # - vars/sites/node-site-2.yml
+    - vars/sites/bitsalt.yml
 
   vars:
     # Each candidate uses | default({}) so that commenting out a vars_file above
@@ -51,7 +51,7 @@
     wordpress_sites: "{{ _wordpress_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
 
     _nodejs_site_candidates:
-      - "{{ node_site_1 | default({}) }}"
+      - "{{ bitsalt | default({}) }}"
       # - "{{ node_site_2 | default({}) }}"
     nodejs_sites: "{{ _nodejs_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
 

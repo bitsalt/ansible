@@ -1,9 +1,9 @@
 ---
-laravel_site:
-  enabled: false        # set to true when image and credentials are ready
-  site_name: laravel-site
-  site_domain: laravelsite.com
-  laravel_image: "yourdockerhub/laravel-site:latest"
+bitsalt_site:
+  enabled: true
+  site_name: bitsalt-site
+  site_domain: bitsalt.com
+  laravel_image: "yourdockerhub/bitsalt-site:latest"
   laravel_app_env: production
   laravel_app_debug: "false"
   laravel_app_key: "{{ vault_laravel_app_key }}"
