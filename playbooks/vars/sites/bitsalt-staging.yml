@@ -1,0 +1,9 @@
+---
+bitsalt_staging:
+  enabled: true
+  site_name: bitsalt-staging
+  site_domain: dev.bitsalt.com
+  node_image: "bitsalt/bitsalt-prod:staging"
+  node_port: 4321
+  node_env: staging
+  www_redirect: false
