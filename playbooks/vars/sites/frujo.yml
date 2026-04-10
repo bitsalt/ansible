@@ -1,0 +1,8 @@
+---
+frujo:
+  enabled: true
+  site_name: frujo
+  site_domain: frujo.net
+  node_image: "bitsalt/frujo:latest"
+  node_port: 4321
+  node_env: production
