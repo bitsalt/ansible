@@ -31,6 +31,14 @@
     group: "{{ deploy_user }}"
     mode: "0644"
 
+- name: Deploy Dockerfile
+  ansible.builtin.template:
+    src: Dockerfile.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/Dockerfile"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0644"
+
 - name: Deploy docker-compose.yml
   ansible.builtin.template:
     src: docker-compose.yml.j2
@@ -59,4 +67,5 @@
   community.docker.docker_compose_v2:
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
     state: present
+    build: always
     recreate: always

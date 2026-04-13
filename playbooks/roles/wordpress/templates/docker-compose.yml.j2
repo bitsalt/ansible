@@ -1,7 +1,8 @@
 ---
 services:
   wordpress:
-    image: {{ item.wp_image }}
+    build: .
+    image: {{ item.site_name }}-wordpress
     restart: unless-stopped
     env_file: .env
     volumes:

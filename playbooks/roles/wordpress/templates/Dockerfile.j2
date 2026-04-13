@@ -1,0 +1,10 @@
+FROM {{ item.wp_image }}
+
+# Override PHP-FPM pool settings in www.conf
+RUN sed -i \
+    -e 's/^pm = .*/pm = dynamic/' \
+    -e 's/^pm\.max_children = .*/pm.max_children = 20/' \
+    -e 's/^pm\.start_servers = .*/pm.start_servers = 5/' \
+    -e 's/^pm\.min_spare_servers = .*/pm.min_spare_servers = 3/' \
+    -e 's/^pm\.max_spare_servers = .*/pm.max_spare_servers = 10/' \
+    /usr/local/etc/php-fpm.d/www.conf
