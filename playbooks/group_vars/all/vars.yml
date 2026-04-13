@@ -12,6 +12,7 @@ scripts_dir: /opt/scripts
 
 # Docker
 docker_proxy_network: proxy
+docker_proxy_subnet: "172.21.0.0/16"
 
 # Traefik
 traefik_image: traefik:v3.3
