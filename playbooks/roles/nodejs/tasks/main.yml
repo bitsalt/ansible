@@ -34,4 +34,4 @@
   community.docker.docker_compose_v2:
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
     state: present
-    recreate: always
+    recreate: auto
