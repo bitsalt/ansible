@@ -1,0 +1,9 @@
+---
+mybizmag:
+  enabled: true
+  site_name: mybizmag
+  site_domain: mybusinessmagnet.tech
+  node_image: "bitsalt/mybizmag:latest"
+  node_port: 4321
+  node_env: production
+  
