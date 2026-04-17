@@ -40,8 +40,8 @@
     - vars/sites/node-site-1.yml
     - vars/sites/bitsalt.yml
     - vars/sites/bitsalt-staging.yml
-    - vars/sites/mybizmag.yml
     - vars/sites/frujo.yml
+    - vars/sites/mybizmag.yml
 
 
   vars:
@@ -57,8 +57,8 @@
     _nodejs_site_candidates:
       - "{{ bitsalt | default({}) }}"
       - "{{ bitsalt_staging | default({}) }}"
-      - "{{ mybizmag | default({}) }}"
       - "{{ frujo | default({}) }}"
+      - "{{ mybizmag | default({}) }}"
       # - "{{ node_site_2 | default({}) }}"
     nodejs_sites: "{{ _nodejs_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
 

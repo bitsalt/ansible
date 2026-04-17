@@ -23,23 +23,22 @@ services:
       # Explicit service definition so both routers can reference it by site name
       - "traefik.http.services.{{ item.site_name }}.loadbalancer.server.port=80"
       # WordPress-specific middleware: block xmlrpc.php abuse
-      - "traefik.http.middlewares.block-xmlrpc.replacepathregex.regex=^/xmlrpc.php"
-      - "traefik.http.middlewares.block-xmlrpc.replacepathregex.replacement=/xmlrpc-blocked"
+      - "traefik.http.middlewares.{{ item.site_name }}-block-xmlrpc.replacepathregex.regex=^/xmlrpc.php"
+      - "traefik.http.middlewares.{{ item.site_name }}-block-xmlrpc.replacepathregex.replacement=/xmlrpc-blocked"
       # WordPress-specific middleware: rate-limit login (5 req/min avg, burst 10)
-      # Applied to the full router; tune or scope to /wp-login.php via a path router if needed
-      - "traefik.http.middlewares.ratelimit-login.ratelimit.average=5"
-      - "traefik.http.middlewares.ratelimit-login.ratelimit.burst=10"
-      - "traefik.http.middlewares.ratelimit-login.ratelimit.period=1m"
+      - "traefik.http.middlewares.{{ item.site_name }}-ratelimit-login.ratelimit.average=5"
+      - "traefik.http.middlewares.{{ item.site_name }}-ratelimit-login.ratelimit.burst=10"
+      - "traefik.http.middlewares.{{ item.site_name }}-ratelimit-login.ratelimit.period=1m"
       # Apex domain router
       - "traefik.http.routers.{{ item.site_name }}.rule=Host(`{{ item.site_domain }}`)"
       - "traefik.http.routers.{{ item.site_name }}.entrypoints=websecure"
       - "traefik.http.routers.{{ item.site_name }}.tls.certresolver=le"
-      - "traefik.http.routers.{{ item.site_name }}.middlewares=block-xmlrpc"
+      - "traefik.http.routers.{{ item.site_name }}.middlewares={{ item.site_name }}-block-xmlrpc"
       # wp-login.php router — scoped rate limit; longer rule wins priority over apex router
       - "traefik.http.routers.{{ item.site_name }}-login.rule=Host(`{{ item.site_domain }}`) && Path(`/wp-login.php`)"
       - "traefik.http.routers.{{ item.site_name }}-login.entrypoints=websecure"
       - "traefik.http.routers.{{ item.site_name }}-login.tls.certresolver=le"
-      - "traefik.http.routers.{{ item.site_name }}-login.middlewares=ratelimit-login"
+      - "traefik.http.routers.{{ item.site_name }}-login.middlewares={{ item.site_name }}-ratelimit-login"
       - "traefik.http.routers.{{ item.site_name }}-login.service={{ item.site_name }}"
       # www → apex redirect (permanent 301)
       - "traefik.http.routers.{{ item.site_name }}-www.rule=Host(`www.{{ item.site_domain }}`)"
