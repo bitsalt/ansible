@@ -40,7 +40,8 @@
     - vars/sites/node-site-1.yml
     - vars/sites/bitsalt.yml
     - vars/sites/bitsalt-staging.yml
-        - vars/sites/frujo.yml
+    - vars/sites/frujo.yml
+    - vars/sites/mybizmag.yml
 
 
   vars:
