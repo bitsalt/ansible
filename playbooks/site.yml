@@ -60,7 +60,15 @@
       - "{{ frujo | default({}) }}"
       - "{{ mybizmag | default({}) }}"
       # - "{{ node_site_2 | default({}) }}"
-    nodejs_sites: "{{ _nodejs_site_candidates | selectattr('site_name', 'defined') | selectattr('enabled', 'equalto', true) | list }}"
+    nodejs_sites: >-
+      {{ ((_nodejs_site_candidates
+           | selectattr('site_name', 'defined')
+           | selectattr('enabled', 'equalto', true)
+           | selectattr('site_name', 'equalto', node_site_filter))
+          if node_site_filter is defined
+          else (_nodejs_site_candidates
+                | selectattr('site_name', 'defined')
+                | selectattr('enabled', 'equalto', true))) | list }}
 
     # laravel_site is defined in vars/sites/laravel-site.yml.
     # Set laravel_site.enabled: true in that file when the site is ready to deploy.

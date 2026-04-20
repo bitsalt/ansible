@@ -4,7 +4,7 @@ frujo:
   site_name: frujo
   site_domain: frujo.net
   node_image: "bitsalt/frujo-finance:latest"
-  node_port: 3001
+  node_port: 3000
   env_vars:
     NODE_ENV: production
     PORT: 3001
