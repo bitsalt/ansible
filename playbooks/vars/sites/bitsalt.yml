@@ -10,4 +10,4 @@ bitsalt:
     PORT: 4321
     TRUST_PROXY: 1
     SITE_DOMAIN: bitsalt.com
-    SITE_NAME: bitsalt
+    SERVICE_NAME: bitsalt
