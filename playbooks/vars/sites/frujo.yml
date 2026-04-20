@@ -4,5 +4,14 @@ frujo:
   site_name: frujo
   site_domain: frujo.net
   node_image: "bitsalt/frujo-finance:latest"
-  node_port: 4321
-  node_env: production
+  node_port: 3001
+  env_vars:
+    NODE_ENV: production
+    PORT: 3001
+    TRUST_PROXY: 1
+    SITE_DOMAIN: frujo.net
+    SITE_NAME: frujo
+    DATABASE_URL: "postgresql://frujo_fin:{{ vault_frujo_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/frujo_finance?sslmode=require"
+    SESSION_SECRET: "{{ vault_frujo_session_secret }}"
+    FRONTEND_URL: "https://frujo.net"
+    DATABASE_CA_CERT: "{{ vault_pg_ca_cert }}"

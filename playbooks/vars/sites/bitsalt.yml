@@ -5,5 +5,9 @@ bitsalt:
   site_domain: bitsalt.com
   node_image: "bitsalt/bitsalt-prod:latest"
   node_port: 4321
-  node_env: production
-  
+  env_vars:
+    NODE_ENV: production
+    PORT: 4321
+    TRUST_PROXY: 1
+    SITE_DOMAIN: bitsalt.com
+    SITE_NAME: bitsalt

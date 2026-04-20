@@ -15,7 +15,7 @@ docker_proxy_network: proxy
 docker_proxy_subnet: "172.21.0.0/16"
 
 # Traefik
-traefik_image: traefik:v3.3
+traefik_image: traefik:v3.6.13
 traefik_acme_email: "{{ vault_traefik_acme_email }}"
 
 # WordPress defaults (can be overridden per site)

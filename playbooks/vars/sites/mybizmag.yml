@@ -5,4 +5,9 @@ mybizmag:
   site_domain: mybusinessmagnet.tech
   node_image: "bitsalt/mybizmag:latest"
   node_port: 4321
-  node_env: production
+  env_vars:
+    NODE_ENV: production
+    PORT: 4321
+    TRUST_PROXY: 1
+    SITE_DOMAIN: mybusinessmagnet.tech
+    SITE_NAME: mybizmag

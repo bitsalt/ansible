@@ -5,5 +5,8 @@ node_site_1:
   site_domain: nodesite1.com
   node_image: "yourdockerhub/node-site-1:latest"
   node_port: 3000
-  node_env: production
-  node_db_url: "postgresql://node1_user:{{ vault_node_site_1_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/node_site_1?sslmode=require"
+  env_vars:
+    NODE_ENV: production
+    PORT: 3000
+    TRUST_PROXY: 1
+    DATABASE_URL: "postgresql://node1_user:{{ vault_node_site_1_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/node_site_1?sslmode=require"

@@ -5,5 +5,8 @@ bitsalt_staging:
   site_domain: dev.bitsalt.com
   node_image: "bitsalt/bitsalt-prod:staging"
   node_port: 4321
-  node_env: staging
+  env_vars:
+    NODE_ENV: staging
+    PORT: 4321
+    TRUST_PROXY: 1
   www_redirect: false
