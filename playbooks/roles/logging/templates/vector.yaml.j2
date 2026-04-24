@@ -66,11 +66,11 @@ sinks:
 {% if logging_traefik_access_enabled %}
       - parse_traefik
 {% endif %}
-    endpoint: ${LOKI_ENDPOINT}
+    endpoint: "${LOKI_ENDPOINT}"
     auth:
       strategy: basic
-      user: ${LOKI_USER}
-      password: ${LOKI_TOKEN}
+      user: "${LOKI_USER}"
+      password: "${LOKI_TOKEN}"
     # Low-cardinality labels only. High-cardinality fields (container_id,
     # request_id, etc.) stay in the log body — putting them on labels
     # shatters Loki's index.
