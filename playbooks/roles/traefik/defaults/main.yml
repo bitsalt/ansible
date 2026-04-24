@@ -1,0 +1,16 @@
+---
+# =============================================================================
+# traefik role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml) override these. Kept here so the role still
+# functions if a group_vars entry is accidentally removed.
+#
+# traefik_acme_email is intentionally absent — it is vault-sourced and has
+# no safe default. Missing → role fails loudly at entry via argument_specs.
+# =============================================================================
+
+proxy_dir: /opt/proxy
+traefik_image: traefik:v3.6.13
+docker_proxy_network: proxy
+docker_proxy_subnet: "172.21.0.0/16"

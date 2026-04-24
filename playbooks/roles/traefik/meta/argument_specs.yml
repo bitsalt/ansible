@@ -1,0 +1,43 @@
+---
+# =============================================================================
+# traefik role — input schema
+#
+# Validated by Ansible at role entry. Unlike webapp/wordpress/laravel this
+# role is not looped and takes no per-site dict; it reads five globals that
+# normally flow in from group_vars/all/vars.yml. Declaring them here still
+# earns type checks and a fail-loud signal when traefik_acme_email is
+# missing (it has no default because its value comes from the vault).
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Deploy the Traefik reverse proxy stack with Let's Encrypt.
+    description: >
+      Manages /opt/proxy: the socket-proxy sidecar config, the Traefik
+      docker-compose.yml, and the acme.json file. Traefik itself routes
+      every other site container by label.
+    options:
+      proxy_dir:
+        type: str
+        required: true
+        description: Base directory on the host for the Traefik stack.
+      traefik_image:
+        type: str
+        required: true
+        description: Traefik Docker image ref, e.g. `traefik:v3.6.13`.
+      docker_proxy_network:
+        type: str
+        required: true
+        description: External shared Docker network that all site containers join.
+      docker_proxy_subnet:
+        type: str
+        required: true
+        description: >
+          CIDR of the proxy network, used for Traefik's forwardedHeaders
+          trustedIPs so sites see the real client IP (not the proxy's).
+      traefik_acme_email:
+        type: str
+        required: true
+        description: >
+          Let's Encrypt account email. Sourced from vault
+          (`{{ vault_traefik_acme_email }}`); intentionally has no default.
