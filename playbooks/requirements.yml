@@ -9,5 +9,9 @@
 # =============================================================================
 
 collections:
+  # Pinned to an exact version per addendum §12: community.docker has a
+  # history of breaking minor releases. 5.2.0 has clean --check mode;
+  # 3.7.0 (and other pre-3.10 versions) corrupt dry-run output with
+  # "missing dry-run mode marker" warnings and falsely report changes.
   - name: community.docker
-    version: ">=3.10.0"
+    version: "==5.2.0"
