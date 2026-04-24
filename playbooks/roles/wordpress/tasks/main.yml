@@ -69,4 +69,4 @@
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
     state: present
     build: always
-    recreate: always
+    recreate: auto

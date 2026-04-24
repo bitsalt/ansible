@@ -46,4 +46,4 @@
     project_src: "{{ proxy_dir }}"
     state: present
     pull: always
-    recreate: always
+    recreate: auto
