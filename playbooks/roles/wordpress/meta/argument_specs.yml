@@ -1,0 +1,70 @@
+---
+# =============================================================================
+# wordpress role — input schema
+#
+# Validated by Ansible at role entry. Callers that omit required fields or
+# pass the wrong type fail loudly here instead of silently producing a
+# malformed docker-compose.yml, Dockerfile, nginx.conf, or .env.
+#
+# Consumed by site.yml via `loop:` — `item` is the per-site config dict
+# declared in vars/sites/<name>.yml.
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Deploy a WordPress site (PHP-FPM + nginx) behind Traefik.
+    description: >
+      Each invocation deploys one WordPress site: a site directory, an nginx
+      config, a Dockerfile wrapping the official wordpress:<tag>-fpm image
+      with tuned PHP-FPM pool settings, a docker-compose.yml pinning
+      wordpress + nginx services, and a .env with DB credentials.
+    options:
+      item:
+        description: Per-site config dict (loop var).
+        type: dict
+        required: true
+        options:
+          enabled:
+            type: bool
+            required: true
+            description: >
+              Upstream gate (selectattr in site.yml drops disabled sites).
+              Always true when the role body runs.
+          site_name:
+            type: str
+            required: true
+            description: >
+              Short identifier; used in directory, image name, and Traefik
+              router/middleware names.
+          site_domain:
+            type: str
+            required: true
+            description: Public hostname; becomes the Traefik Host() rule and nginx server_name.
+          wp_image:
+            type: str
+            required: true
+            description: >
+              WordPress FPM image reference used as the Dockerfile base
+              (e.g. "wordpress:6.9.4-php8.2-fpm"). Usually references the
+              global `wordpress_default_image` var.
+          wp_db_host:
+            type: str
+            required: true
+            description: "MySQL host:port (typically `{{ vault_mysql_host }}:{{ vault_mysql_port }}`)."
+          wp_db_name:
+            type: str
+            required: true
+            description: MySQL database name.
+          wp_db_user:
+            type: str
+            required: true
+            description: MySQL user.
+          wp_db_password:
+            type: str
+            required: true
+            no_log: true
+            description: MySQL password; sourced from vault.
+          wp_table_prefix:
+            type: str
+            required: true
+            description: WordPress table prefix (e.g. `wp_`). Must end with `_`.

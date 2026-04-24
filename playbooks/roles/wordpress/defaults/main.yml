@@ -1,0 +1,15 @@
+---
+# =============================================================================
+# wordpress role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml, per-site vars files) override these. Kept here
+# so the role still functions if a group_vars entry is accidentally removed.
+# =============================================================================
+
+sites_base_dir: /opt/sites
+deploy_user: deploy
+docker_proxy_network: proxy
+# Used by nginx.conf's set_real_ip_from directive so WordPress sees the
+# client IP forwarded by Traefik rather than the proxy container's.
+docker_proxy_subnet: "172.21.0.0/16"
