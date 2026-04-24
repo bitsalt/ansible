@@ -9,4 +9,6 @@ bitsalt_staging:
     NODE_ENV: staging
     PORT: 4321
     TRUST_PROXY: 1
+    SITE_DOMAIN: dev.bitsalt.com
+    SERVICE_NAME: bitsalt-staging
   www_redirect: false
