@@ -39,7 +39,7 @@ transforms:
     # Cheap defensive scrub for the most common leak vectors in app stdout.
     # Structured apps should redact upstream; this catches the rest.
     source: |
-      .message = replace(string!(.message), r'(?i)(authorization|cookie|set-cookie|x-api-key)\s*[:=]\s*\S+', "$1: [REDACTED]")
+      .message = replace(string!(.message), r'(?i)(authorization|cookie|set-cookie|x-api-key)\s*[:=]\s*\S+', "$$1: [REDACTED]")
 {% if logging_traefik_access_enabled %}
 
   parse_traefik:
