@@ -55,6 +55,7 @@
     username: "{{ vault_dockerhub_username }}"
     password: "{{ vault_dockerhub_token }}"
     state: present
+  no_log: true
 
 - name: Create Docker proxy network
   community.docker.docker_network:

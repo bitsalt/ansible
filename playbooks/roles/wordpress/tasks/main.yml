@@ -55,6 +55,7 @@
     group: "{{ deploy_user }}"
     mode: "0600"
   register: env_result
+  no_log: true
 
 - name: Remove site (with volumes) when .env changes so wp-config.php is regenerated
   community.docker.docker_compose_v2:
