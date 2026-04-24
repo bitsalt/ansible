@@ -76,7 +76,7 @@
                 | selectattr('enabled', 'equalto', true))) | list }}
 
     _fastapi_site_candidates: []
-      # - "{{ mobile_api | default({}) }}"
+    # - "{{ mobile_api | default({}) }}"
     fastapi_sites: >-
       {{ ((_fastapi_site_candidates
            | selectattr('site_name', 'defined')

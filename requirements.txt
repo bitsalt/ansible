@@ -1,0 +1,8 @@
+# Control-node Python tooling for bitsalt-ansible.
+# Used by the lint CI workflow; can be installed locally with
+# `pip install -r requirements.txt` inside a venv.
+#
+# Galaxy collection dependencies live in playbooks/requirements.yml.
+
+ansible-lint==6.17.2
+yamllint==1.33.0
