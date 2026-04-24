@@ -11,7 +11,8 @@ frujo:
     TRUST_PROXY: 1
     SITE_DOMAIN: frujo.net
     SERVICE_NAME: frujo
-    DATABASE_URL: "postgresql://frujo_fin:{{ vault_frujo_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/frujo_finance?sslmode=require"
+    DATABASE_URL: "postgresql://frujo_fin:{{ vault_frujo_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/frujo_finance"
     SESSION_SECRET: "{{ vault_frujo_session_secret }}"
     FRONTEND_URL: "https://frujo.net"
+    ANTHROPIC_API_KEY: "{{ vault_frujo_anthropi_api_key }}"
     DATABASE_CA_CERT: "{{ vault_pg_ca_cert }}"
