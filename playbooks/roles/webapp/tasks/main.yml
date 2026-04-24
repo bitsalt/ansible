@@ -1,9 +1,11 @@
 ---
 # =============================================================================
-# Role: nodejs
-# Loops over nodejs_sites list defined in site.yml.
-# Each iteration deploys one Node.js site's directory, Compose file, and
-# Vault-sourced .env file.
+# Role: webapp
+# Generic "stateless HTTP container behind Traefik" role. Used for Node.js and
+# FastAPI (Python) sites — any app that publishes a single HTTP port and
+# reads config from env vars. Looped from site.yml via the nodejs_sites and
+# fastapi_sites lists. Each iteration deploys one site's directory, Compose
+# file, and Vault-sourced .env file.
 # =============================================================================
 
 - name: Create site directory
@@ -30,7 +32,7 @@
     group: "{{ deploy_user }}"
     mode: "0600"
 
-- name: Start Node.js site
+- name: Start webapp site
   community.docker.docker_compose_v2:
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
     state: present

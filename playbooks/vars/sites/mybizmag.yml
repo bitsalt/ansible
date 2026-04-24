@@ -3,8 +3,8 @@ mybizmag:
   enabled: true
   site_name: mybizmag
   site_domain: mybusinessmagnet.tech
-  node_image: "bitsalt/mybizmag:latest"
-  node_port: 80
+  image: "bitsalt/mybizmag:latest"
+  port: 80
   env_vars:
     NODE_ENV: production
     PORT: 80

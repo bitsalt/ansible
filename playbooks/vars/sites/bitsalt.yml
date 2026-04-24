@@ -3,8 +3,8 @@ bitsalt:
   enabled: true
   site_name: bitsalt
   site_domain: bitsalt.com
-  node_image: "bitsalt/bitsalt-prod:latest"
-  node_port: 4321
+  image: "bitsalt/bitsalt-prod:latest"
+  port: 4321
   env_vars:
     NODE_ENV: production
     PORT: 4321

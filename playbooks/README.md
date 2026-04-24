@@ -35,6 +35,8 @@ ansible-playbook site.yml --ask-vault-pass --tags traefik
 ansible-playbook site.yml --ask-vault-pass --tags wordpress
 ansible-playbook site.yml --ask-vault-pass --tags laravel
 ansible-playbook site.yml --ask-vault-pass --tags nodejs
+ansible-playbook site.yml --ask-vault-pass --tags fastapi
+ansible-playbook site.yml --ask-vault-pass --tags webapp    # both nodejs + fastapi
 ```
 
 Check mode (dry run):
@@ -57,7 +59,16 @@ ansible-playbook site.yml --ask-vault-pass --check
 
 ## Adding a new Node.js site
 
-Same pattern — copy `vars/sites/node-site-1.yml`, rename the dict key, add the var file to `vars_files` in `site.yml`, add `"{{ new_site }}"` to `nodejs_sites`, run with `--tags nodejs`.
+Same pattern — copy `vars/sites/node-site-1.yml`, rename the dict key, add the var file to `vars_files` in `site.yml`, add `"{{ new_site }}"` to `_nodejs_site_candidates`, run with `--tags nodejs`.
+
+## Adding a new FastAPI site
+
+Node.js and FastAPI sites share the `webapp` role (a generic stateless-HTTP-container pattern). Only the list membership differs.
+
+1. Create `vars/sites/<api-name>.yml` defining a dict with `enabled`, `site_name`, `site_domain`, `image`, `port`, and an `env_vars` map. Reference any secrets as `{{ vault_<name> }}`.
+2. Add credentials/secrets to `vault.yml`.
+3. In `site.yml`: add the var file to `vars_files`, add `"{{ <dict_name> }}"` to `_fastapi_site_candidates`.
+4. Run: `ansible-playbook site.yml --ask-vault-pass --tags fastapi`
 
 ## Directory structure
 
@@ -83,5 +94,5 @@ bitsalt-ansible/
     traefik/                      # reverse proxy stack
     wordpress/                    # WP sites (looped)
     laravel/                      # Laravel site + queue + scheduler
-    nodejs/                       # Node.js sites (looped)
+    webapp/                       # Node.js + FastAPI sites (looped)
 ```

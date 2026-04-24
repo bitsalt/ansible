@@ -3,8 +3,8 @@ node_site_1:
   enabled: false        # set to true when image and credentials are ready
   site_name: node-site-1
   site_domain: nodesite1.com
-  node_image: "yourdockerhub/node-site-1:latest"
-  node_port: 3000
+  image: "yourdockerhub/node-site-1:latest"
+  port: 3000
   env_vars:
     NODE_ENV: production
     PORT: 3000

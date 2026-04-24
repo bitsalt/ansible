@@ -29,3 +29,4 @@ deploy_group: deploy
 # when no sites are configured rather than failing on undefined variables.
 wordpress_sites: []
 nodejs_sites: []
+fastapi_sites: []
