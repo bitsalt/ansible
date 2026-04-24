@@ -1,0 +1,36 @@
+---
+# =============================================================================
+# docker role — input schema
+#
+# Validated by Ansible at role entry. Declares the four variables the role
+# reads directly: two non-secret globals and two vault-sourced Docker Hub
+# credentials.
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Install Docker Engine, log in to Docker Hub, and create the proxy network.
+    description: >
+      Installs docker-ce and the compose plugin from Docker's official apt
+      repo, ensures the ansible and deploy users are in the docker group,
+      authenticates the Docker daemon with Docker Hub, and creates the
+      external `proxy` network Traefik and all site containers share.
+    options:
+      docker_proxy_network:
+        type: str
+        required: true
+        description: External shared Docker network that Traefik and every site container joins.
+      deploy_user:
+        type: str
+        required: true
+        description: Unix user added to the docker group for CI/CD-driven `docker compose` runs.
+      vault_dockerhub_username:
+        type: str
+        required: true
+        no_log: true
+        description: Docker Hub username; sourced from vault.
+      vault_dockerhub_token:
+        type: str
+        required: true
+        no_log: true
+        description: Docker Hub access token; sourced from vault.
