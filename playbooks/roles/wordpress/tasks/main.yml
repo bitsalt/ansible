@@ -14,6 +14,10 @@
     group: "{{ deploy_user }}"
     mode: "0755"
 
+# No recurse: true on the task below — WordPress writes files at 0644;
+# recursively re-applying 0755 would flip every file's mode on every play,
+# producing cosmetic `changed` churn. The bind-mount dir itself is what we
+# own; file modes inside are WordPress's concern.
 - name: Create wp-content bind mount directory
   ansible.builtin.file:
     path: "{{ sites_base_dir }}/{{ item.site_name }}/wp-content"
@@ -21,7 +25,6 @@
     owner: "33"
     group: "33"
     mode: "0755"
-    recurse: true
 
 - name: Deploy nginx.conf
   ansible.builtin.template:
@@ -38,6 +41,7 @@
     owner: "{{ deploy_user }}"
     group: "{{ deploy_user }}"
     mode: "0644"
+  register: dockerfile_result
 
 - name: Deploy docker-compose.yml
   ansible.builtin.template:
@@ -68,5 +72,8 @@
   community.docker.docker_compose_v2:
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
     state: present
-    build: always
+    # build: always is banned on always-run tasks (addendum §4). Force a
+    # rebuild only when the Dockerfile changed; otherwise fall back to
+    # compose's own policy (builds only if the image is missing locally).
+    build: "{{ 'always' if dockerfile_result.changed else 'policy' }}"
     recreate: auto
