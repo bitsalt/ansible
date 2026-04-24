@@ -1,0 +1,13 @@
+---
+# =============================================================================
+# common role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml) override these. Kept here so the role still
+# functions if a group_vars entry is accidentally removed.
+# =============================================================================
+
+sites_base_dir: /opt/sites
+proxy_dir: /opt/proxy
+backup_dir: /opt/backups
+scripts_dir: /opt/scripts
