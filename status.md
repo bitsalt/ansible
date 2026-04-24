@@ -64,6 +64,11 @@ The following containers are running on the Droplet:
 - [ ] node-site-2 vars file — copy node-site-1.yml when ready
 - [ ] Real Docker Hub image names substituted into laravel and nodejs site var files
 - [ ] `enabled: true` set in laravel and nodejs var files once images are built and pushed
+- [x] `logging` role scaffolded — Vector container shipping container stdout/stderr to Grafana Cloud Loki. Opt-in via `logging_enabled` (default false). Remaining:
+  - [ ] Populate `vault_loki_endpoint`, `vault_loki_user`, `vault_loki_token` in `group_vars/all/vault.yml` (waiting on Grafana Cloud account setup)
+  - [ ] Flip `logging_enabled: true` in `group_vars/all/vars.yml` and run `--tags logging`
+  - [ ] Traefik role: emit JSON access logs to `/opt/proxy/logs/access.log`, bind-mount into the stack, then flip `logging_traefik_access_enabled: true`
+  - [ ] Set a volume-ceiling alert in Grafana Cloud at ~80% of the monthly plan
 
 ### Remaining sites (migration)
 - [ ] Migrate remaining ~11 WordPress sites one at a time (create var file, populate vault, run `--tags wordpress`)

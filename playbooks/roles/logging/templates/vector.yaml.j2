@@ -1,0 +1,86 @@
+---
+# Managed by Ansible — do not edit by hand.
+#
+# Vector config. Loki credentials are injected at Vector startup from the
+# sibling .env file (env_file: in docker-compose.yml); they never appear
+# in this file.
+
+data_dir: /var/lib/vector
+
+sources:
+  containers:
+    type: docker_logs
+    # Don't ship our own logs — would create a feedback loop.
+    exclude_containers:
+      - logging-vector
+{% if logging_traefik_access_enabled %}
+
+  traefik_access:
+    type: file
+    include:
+      - /var/log/traefik/access.log
+    read_from: end
+{% endif %}
+
+transforms:
+  enrich_containers:
+    type: remap
+    inputs:
+      - containers
+    source: |
+      .site = string!(.label."com.docker.compose.project" || "unknown")
+      .service = string!(.label."com.docker.compose.service" || .container_name || "unknown")
+      .source_kind = "container"
+
+  redact_containers:
+    type: remap
+    inputs:
+      - enrich_containers
+    # Cheap defensive scrub for the most common leak vectors in app stdout.
+    # Structured apps should redact upstream; this catches the rest.
+    source: |
+      .message = replace(string!(.message), r'(?i)(authorization|cookie|set-cookie|x-api-key)\s*[:=]\s*\S+', "$1: [REDACTED]")
+{% if logging_traefik_access_enabled %}
+
+  parse_traefik:
+    type: remap
+    inputs:
+      - traefik_access
+    source: |
+      parsed, err = parse_json(.message)
+      if err == null {
+        . = merge(., parsed)
+      }
+      .site = string!(.RouterName || "unknown")
+      .service = "traefik"
+      .source_kind = "traefik_access"
+      if exists(.request_Authorization) { .request_Authorization = "[REDACTED]" }
+      if exists(.request_Cookie) { .request_Cookie = "[REDACTED]" }
+{% endif %}
+
+sinks:
+  loki:
+    type: loki
+    inputs:
+      - redact_containers
+{% if logging_traefik_access_enabled %}
+      - parse_traefik
+{% endif %}
+    endpoint: ${LOKI_ENDPOINT}
+    auth:
+      strategy: basic
+      user: ${LOKI_USER}
+      password: ${LOKI_TOKEN}
+    # Low-cardinality labels only. High-cardinality fields (container_id,
+    # request_id, etc.) stay in the log body — putting them on labels
+    # shatters Loki's index.
+    labels:
+      deployment: {{ logging_deployment_label }}
+      host: {% raw %}"{{ host }}"{% endraw +%}
+      site: {% raw %}"{{ site }}"{% endraw +%}
+      service: {% raw %}"{{ service }}"{% endraw +%}
+      source_kind: {% raw %}"{{ source_kind }}"{% endraw +%}
+    encoding:
+      codec: json
+    compression: snappy
+    out_of_order_action: accept

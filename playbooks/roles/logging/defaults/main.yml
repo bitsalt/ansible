@@ -1,0 +1,33 @@
+---
+# =============================================================================
+# logging role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml) override these. Kept here so the role still
+# functions if a group_vars entry is accidentally removed.
+#
+# Three values are intentionally absent — they are vault-sourced and have
+# no safe default. Missing → role fails loudly at entry via argument_specs:
+#   logging_loki_endpoint  (e.g. https://logs-prod-006.grafana.net)
+#   logging_loki_user      (numeric tenant / user ID from Grafana Cloud)
+#   logging_loki_token     (access policy token)
+# =============================================================================
+
+# Opt-in. Flip to true in group_vars/all/vars.yml once the Grafana Cloud
+# credentials are populated in vault. Default is false so a fresh clone
+# doesn't fail the play before secrets are configured.
+logging_enabled: false
+
+logging_dir: /opt/logging
+logging_vector_image: timberio/vector:0.47.0-alpine
+
+# Emitted as a Loki label on every log line so the same Grafana tenant can
+# host prod + staging + other hosts without their streams colliding.
+logging_deployment_label: bitsalt-prod
+
+# Gates the Traefik access-log file source in vector.yaml. Leave false until
+# the Traefik role is updated to emit a JSON access log to a bind-mounted
+# file that Vector can read. Flipping this true without that change is a
+# no-op (Vector will log a "file not found" warning and otherwise work).
+logging_traefik_access_enabled: false
+logging_traefik_access_path: /opt/proxy/logs/access.log

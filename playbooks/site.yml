@@ -14,6 +14,7 @@
 #     ansible-playbook site.yml --tags nodejs
 #     ansible-playbook site.yml --tags fastapi
 #     ansible-playbook site.yml --tags webapp     # both nodejs + fastapi
+#     ansible-playbook site.yml --tags logging    # Vector → Grafana Cloud Loki
 #
 #   Adding a new WordPress site:
 #     1. Copy vars/sites/taotedev.yml to vars/sites/new-client.yml
@@ -99,6 +100,10 @@
 
     - role: traefik
       tags: [traefik]
+
+    - role: logging
+      tags: [logging]
+      when: logging_enabled | default(false)
 
   tasks:
     - name: Deploy WordPress sites

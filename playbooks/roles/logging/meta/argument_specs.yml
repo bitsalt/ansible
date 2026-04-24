@@ -1,0 +1,72 @@
+---
+# =============================================================================
+# logging role — input schema
+#
+# Validated by Ansible at role entry. Like traefik this role is not looped
+# and takes no per-site dict; it reads globals that flow in from
+# group_vars/all/vars.yml. Declaring them here earns type checks and a
+# fail-loud signal when vault-sourced credentials are missing.
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Deploy the Vector log shipper to Grafana Cloud Loki.
+    description: >
+      Manages /opt/logging: a single Vector container that reads every other
+      container's stdout/stderr via the Docker socket, optionally tails the
+      Traefik access log, redacts common PII fields, and ships to a Loki
+      endpoint over HTTPS with basic auth.
+    options:
+      logging_enabled:
+        type: bool
+        required: true
+        description: >
+          Master switch. When false the role is skipped in site.yml. Kept
+          false by default so the repo is usable before Grafana Cloud
+          credentials are populated in vault.
+      logging_dir:
+        type: str
+        required: true
+        description: Base directory on the host for the Vector stack.
+      logging_vector_image:
+        type: str
+        required: true
+        description: Vector Docker image ref, pinned by tag.
+      logging_loki_endpoint:
+        type: str
+        required: true
+        description: >
+          Loki base URL (no trailing /loki/api/v1/push — Vector appends it).
+          Sourced from vault; intentionally has no default.
+      logging_loki_user:
+        type: str
+        required: true
+        description: >
+          Grafana Cloud Loki tenant / user ID (numeric). Sourced from vault;
+          intentionally has no default.
+      logging_loki_token:
+        type: str
+        required: true
+        no_log: true
+        description: >
+          Grafana Cloud access policy token with logs:write scope. Sourced
+          from vault; intentionally has no default.
+      logging_deployment_label:
+        type: str
+        required: true
+        description: >
+          Value emitted as the `deployment` Loki label on every stream.
+          Keeps prod/staging/other hosts separable inside one Grafana tenant.
+      logging_traefik_access_enabled:
+        type: bool
+        required: true
+        description: >
+          When true, Vector tails the Traefik access-log file at
+          logging_traefik_access_path. Requires the Traefik role to be
+          emitting JSON access logs to that path (a separate change).
+      logging_traefik_access_path:
+        type: str
+        required: true
+        description: >
+          Host path to the Traefik access log. Bind-mounted read-only into
+          the Vector container when logging_traefik_access_enabled is true.
