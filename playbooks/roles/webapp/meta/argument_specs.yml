@@ -12,12 +12,17 @@
 
 argument_specs:
   main:
-    short_description: Deploy a stateless HTTP container behind Traefik.
+    short_description: Provision the site directory and Vault-sourced .env for a stateless HTTP app.
     description: >
       Generic role for Node.js, FastAPI, and similar apps that expose a
-      single HTTP port and take config via environment variables. Runtime-
-      specific concerns (build, workers, dependencies) live inside the
-      container image, not in Ansible.
+      single HTTP port and take config via environment variables. Ansible
+      owns the site directory and the .env file; the app repo owns
+      docker-compose.yml and the build/push/pull deploy flow.
+
+      Several fields on the per-site dict (site_domain, image, port,
+      www_redirect) are declared here for schema completeness and
+      single-source-of-truth — but are consumed by the app repo's
+      docker-compose.yml, not by any Ansible task in this role.
     options:
       item:
         description: Per-site config dict (loop var).
@@ -34,19 +39,28 @@ argument_specs:
           site_name:
             type: str
             required: true
-            description: Short identifier; used in directory, container, and Traefik router names.
+            description: >
+              Short identifier. Used by this role for the site directory
+              name; also used downstream by the app repo's compose for
+              container and Traefik router names.
           site_domain:
             type: str
             required: true
-            description: Public hostname; becomes the Traefik Host() rule.
+            description: >
+              Public hostname. Consumed by the app repo's
+              docker-compose.yml (Traefik Host rule); not used by this role.
           image:
             type: str
             required: true
-            description: Docker image reference, e.g. `org/repo:tag`.
+            description: >
+              Docker image reference. Consumed by the app repo's
+              docker-compose.yml; not used by this role.
           port:
             type: int
             required: true
-            description: Container port Traefik routes to.
+            description: >
+              Container port. Consumed by the app repo's
+              docker-compose.yml (Traefik service port); not used by this role.
           env_vars:
             type: dict
             required: true
@@ -55,4 +69,6 @@ argument_specs:
             type: bool
             required: false
             default: true
-            description: When true, emit a `www.<domain>` 301 → apex router block.
+            description: >
+              When true, the app repo's docker-compose.yml should emit a
+              `www.<domain>` 301 → apex router block. Not used by this role.

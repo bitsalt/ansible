@@ -53,6 +53,7 @@ handles CI/CD for custom-image sites.
 | laravel-site | Laravel | DO Managed MySQL | Custom, Docker Hub: `yourdockerhub/laravel-site` |
 | node-site-1 | Node.js | DO Managed PostgreSQL | Custom, Docker Hub: `yourdockerhub/node-site-1` |
 | node-site-2 | Node.js | DO Managed PostgreSQL | Custom, Docker Hub: `yourdockerhub/node-site-2` |
+| (mobile-api) | FastAPI (Python) | DO Managed PostgreSQL | Custom, Docker Hub: TBD — mobile-app backend |
 
 ---
 
@@ -157,8 +158,33 @@ bitsalt-ansible/
     traefik/                    — Traefik stack, acme.json, templated compose file
     wordpress/                  — looped over wordpress_sites list in site.yml
     laravel/                    — single site, queue worker toggle, scheduler cron
-    nodejs/                     — looped over nodejs_sites list in site.yml
+    webapp/                     — stateless-HTTP-container role; looped over
+                                  nodejs_sites and fastapi_sites in site.yml
 ```
+
+The `webapp` role handles any app that exposes a single HTTP port and takes
+config via env vars (Node.js, FastAPI/Python, and similar). Runtime-specific
+concerns (workers, build, dependencies) live inside the container image, not
+in Ansible. If a future site needs something structurally different (sidecar
+worker, bind mount, non-HTTP entrypoint), split a new role at that point
+rather than preemptively.
+
+**Ownership boundary for `webapp` sites:** Ansible owns the site directory
+and the Vault-sourced `.env` file. The app repo owns `docker-compose.yml`
+and the deploy flow (build/push/pull). App repos churn and may need to
+edit compose in-place on deploy (image tag pinning, etc.); re-rendering
+from Ansible would clobber those edits and reintroduce drift every run.
+
+First-time bootstrap for a new webapp site is two steps: (1) add site vars
+and run Ansible to create the directory and render `.env`, (2) kick the
+app repo's deploy flow to land `docker-compose.yml` and bring the
+container up. Ansible's `Start webapp site` task stat-gates on the compose
+file existing, so a fresh site pre-step-2 runs cleanly (`.env` is placed;
+container-start is skipped). Subsequent Ansible runs restart the container
+via `recreate: auto` when `.env` changes (compose v2 hashes `env_file`).
+
+`wordpress` and `laravel` roles have no per-app CI and retain full Ansible
+ownership of their compose files.
 
 ### Role loop pattern
 WordPress and Node.js roles loop via `site.yml`:
