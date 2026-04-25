@@ -93,7 +93,8 @@ playbooks/
     ├── traefik/                    Traefik stack + socket proxy, acme.json
     ├── wordpress/                  Looped via site.yml; per-site WP + nginx-sidecar
     ├── laravel/                    Single-site (currently); queue worker toggle, scheduler cron
-    └── webapp/                     Looped via site.yml; generic single-port HTTP role
+    ├── webapp/                     Looped via site.yml; generic single-port HTTP role
+    └── logging/                    Cross-cutting; Vector → Grafana Cloud Loki shipper
 ```
 
 Every role declares `meta/argument_specs.yml` and `defaults/main.yml` (Ansible addendum §5/§14). Every task that renders or accepts a vault value carries `no_log: true` (addendum §7/§8).
@@ -126,6 +127,17 @@ Single-site role currently. One container per site, queue worker toggleable, sch
 Generic role for single-port HTTP apps backed by DO Managed PostgreSQL. **Ansible owns `.env`; the app repo owns `docker-compose.yml`.** This is the webapp ownership boundary — see [ADR 0006](adr/0006-webapp-ownership-boundary.md). Stat-gates on the compose file existing so a fresh site bootstraps cleanly when the app repo's deploy lands compose later.
 
 If a future webapp needs structural deviation (sidecar worker, bind mount, non-HTTP entrypoint), split a new role at that point rather than over-generalizing `webapp`.
+
+### Logging (cross-cutting)
+
+The `logging` role deploys a single Vector container at `/opt/logging/` that reads every other container's stdout/stderr via the Docker socket and ships to Grafana Cloud Loki over HTTPS with basic auth. Optionally tails the Traefik access log when `logging_traefik_access_enabled: true`.
+
+- **Master switch:** `logging_enabled` (default false). The role is skipped in `site.yml` when off, so the repo is usable before Loki credentials are populated in vault.
+- **Inputs:** declared in `meta/argument_specs.yml`. Vault-sourced credentials (`logging_loki_endpoint`, `logging_loki_user`, `logging_loki_token`) have no defaults — missing values fail at entry. `logging_loki_token` carries `no_log: true`.
+- **Cross-cutting, not per-site:** like `traefik`, the role is single-instance, not looped. It observes every site without per-site wiring.
+- **Deployment label:** `logging_deployment_label` is emitted as the `deployment` Loki label on every stream so prod / staging / other hosts stay separable inside one Grafana tenant.
+
+PII redaction lives in the Vector pipeline config (`vector.yaml.j2` template). Adding a new redaction rule is a Vector config change, not an Ansible structural change.
 
 ---
 

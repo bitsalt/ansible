@@ -49,6 +49,7 @@ Complete Task B drift reconciliation: re-baseline `--check --diff` against `comm
 | OQ-3 | PM | Should `v1/` be retired now or after the remaining ~11 WordPress site migrations? | Retain `v1/` until at least the first three migrated sites have run cleanly under `playbooks/` end-to-end. Revisit at sprint review. | open |
 | OQ-4 | PM | Should `status.md` and `docs/refactor.md` be retired now that their content is in the sprint file + ADRs? | Retain through this sprint as a cross-reference; retire at sprint review once Task B is complete. | open |
 | OQ-5 | PM | Coordinate rename of legacy vault key `taotedev_db_password` → `vault_taotedev_db_password` — when? | Defer. Bundle with a future vault-hygiene pass; not blocking any current work. | open |
+| OQ-6 | PM | `docs/TODO.md` (from remote merge) and the sprint file's Open Questions / Carry-over Log are parallel bug-parking surfaces. Pick one as canonical. | Leaning toward keeping `TODO.md` for "investigations surfaced outside the active session" and the sprint file for in-flight sprint work. Will need a clear handoff convention so issues don't sit in both places. | open |
 
 Other roles append proposals here; PM lands them at the next sprint review or on demand.
 
@@ -60,6 +61,7 @@ New entries at the top.
 
 ### 2026-04-24
 
+- **`logging` role landed via remote merge** (commit `4689148` and follow-ups in `3a74950`). Cross-cutting Vector → Grafana Cloud Loki shipper at `/opt/logging/`, gated by `logging_enabled` (default false). Architecture, ops/ansible, and onboarding docs updated to reflect the new role. A separate `dev.bitsalt.com` Let's Encrypt rate-limit issue was surfaced via the freshly-deployed Loki stack and is tracked in `docs/TODO.md` (separate from this sprint file pending OQ-6).
 - **Phase 2 platform migration of bitsalt-ansible complete.** Full set of platform docs landed: requirements (BA), architecture + 7 ADRs + 1 interface spec (Architect), 6 runbooks + 3 ops docs (DevOps), this sprint file + `.agent-context.md` + dashboard row (PM). README and getting-started forthcoming from Tech Writer.
 - **Webapp ownership boundary established** — Ansible owns `.env` for webapp sites; the app repo owns `docker-compose.yml` and the deploy flow. Drives ADR 0006 and `docs/interfaces/ci-deploy.md`. Resolved drift inventory item #3.
 - **A4 (`recreate: auto` over `recreate: always`) complete.** Commit `8bba511`. Traefik handler retained at `always` with explicit block-comment rationale (compose v2 cannot detect changes to bind-mounted file content; socket-proxy.conf edits would be missed under `auto`).

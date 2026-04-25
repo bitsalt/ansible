@@ -28,7 +28,7 @@ Brings the Droplet to the desired state across every role (common, docker, traef
 ansible-playbook site.yml --ask-vault-pass --tags traefik
 ```
 
-Replace `traefik` with `common`, `docker`, `wordpress`, `laravel`, or `webapp` to target one role's tasks.
+Replace `traefik` with `common`, `docker`, `wordpress`, `laravel`, `webapp`, or `logging` to target one role's tasks.
 
 ### Dry run
 
@@ -140,6 +140,7 @@ Per Ansible coding-standards addendum §5/§14, every role declares `meta/argume
 | `wordpress` | ✅ | `enabled, site_name, site_domain, wp_image, wp_db_host, wp_db_name, wp_db_user, wp_db_password, wp_table_prefix` |
 | `laravel` | ✅ | (laravel_site dict — read directly, not via item) |
 | `webapp` | ✅ | `enabled, site_name, site_domain, image, port, env_vars` (optional: `www_redirect`) |
+| `logging` | ✅ | `logging_enabled, logging_dir, logging_vector_image, logging_loki_endpoint, logging_loki_user, logging_loki_token, logging_deployment_label, logging_traefik_access_enabled, logging_traefik_access_path` (the three Loki credentials are vault-sourced, no default; `logging_loki_token` carries `no_log: true`) |
 
 Missing required fields cause the role to fail at entry with a clear error rather than templating garbage.
 

@@ -51,7 +51,7 @@ bitsalt-ansible/
 │   ├── inventory/hosts.yml
 │   ├── group_vars/all/{vars,vault}.yml
 │   ├── vars/sites/<site>.yml       One file per site (named-dict pattern)
-│   └── roles/                      common, docker, traefik, wordpress, laravel, webapp
+│   └── roles/                      common, docker, traefik, wordpress, laravel, webapp, logging
 └── v1/                             Legacy structure, retained for reference
 ```
 
