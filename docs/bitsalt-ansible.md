@@ -2,8 +2,8 @@
 
 Single source of truth for in-flight work. PM is the only writer; other roles propose changes via the Open Questions table.
 
-**Sprint cadence:** 7 days (per AGENT-PLATFORM.md).
-**Sprint window:** 2026-04-21 → 2026-04-28 (current).
+**Sprint cadence:** 7 days, Mon → Sun boundary (per 2026-04-25 sprint-1 review).
+**Sprint window:** 2026-04-21 → 2026-05-03 (Sprint 1, extended at sprint-1 review to align onto the new Mon-Sun boundary). Sprint 2 starts Mon 2026-05-04.
 
 ---
 
@@ -61,6 +61,8 @@ New entries at the top.
 
 ### 2026-04-25
 
+- **Operator-discipline note (durable): no manual changes on the bitsalt-ansible-managed server until Task B closes** (`changed=0` on a second consecutive apply). All infrastructure changes route through ansible. The backup role (FR9 / `add-daily-backups` user story, currently in the Carry-over Log) is gated behind Task B closure for the same reason — adding a new role while drift reconciliation is in flight risks contaminating the baseline. Captured here, in `BitSalt-Projects.md` row blockers, and confirmed at the 2026-04-25 sprint-1 review.
+- **Sprint 1 extended to 2026-05-03 and rebased onto Mon-Sun boundary** going forward (Sprint 2 = Mon 2026-05-04 → Sun 2026-05-10), per portfolio-level sprint-1 review. Sprint length stays 7 days; only the boundary moves. See `BitSalt-Projects.md` § Sprint Rhythm.
 - **Logging gap-fix arc complete.** The original Phase 2 migration roles ran before the `logging` role merged in mid-flight (see 2026-04-24 entry), so their artifacts had no coverage of it. Today's pass closed those gaps with four backfill artifacts: ADR 0008 `docs/adr/0008-centralized-logging-vector-loki.md` (Architect; see `agent-logs/architect.log.md`), NFR7 added to `docs/requirements.md` (BA; see `agent-logs/business-analyst.log.md`), expanded logging coverage in `docs/getting-started.md` and `docs/onboarding.md` (Tech Writer; see `agent-logs/technical-writer.log.md`), and this PM bookkeeping pass landing M9 ✅ plus updates to `.agent-context.md`, `BitSalt-Projects.md`, and `AGENT-MIGRATION-NOTES.md` (see `agent-logs/project-manager.log.md`). Phase 2 pilot #1 is now genuinely complete on the platform side; legacy `CLAUDE.md` retire awaits Jeff's end-to-end sign-off.
 
 ### 2026-04-24
