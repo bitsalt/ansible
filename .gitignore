@@ -5,6 +5,9 @@ vars/sites/*.vault.yml
 .vault_pass
 .bitsalt_vault_pass
 
+# Ansible apply baselines — local-only diagnostic captures, not history
+.checks/
+
 # OS noise
 .DS_Store
 *.swp
