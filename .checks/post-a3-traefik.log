@@ -1,0 +1,507 @@
+
+PLAY [BitSalt Droplet provisioning] ********************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [droplet]
+
+TASK [common : Create sites base directory] ************************************
+ok: [droplet]
+
+TASK [common : Create proxy directory] *****************************************
+ok: [droplet]
+
+TASK [common : Create backups directory] ***************************************
+ok: [droplet]
+
+TASK [common : Create scripts directory] ***************************************
+ok: [droplet]
+
+TASK [common : Install base packages] ******************************************
+ok: [droplet]
+
+TASK [docker : Install Docker GPG key] *****************************************
+ok: [droplet]
+
+TASK [docker : Add Docker apt repository] **************************************
+ok: [droplet]
+
+TASK [docker : Install Docker Engine, compose plugin, and Python SDK] **********
+ok: [droplet]
+
+TASK [docker : Ensure Docker service is enabled and running] *******************
+ok: [droplet]
+
+TASK [docker : Add ansible user to docker group] *******************************
+ok: [droplet]
+
+TASK [docker : Add deploy user to docker group] ********************************
+ok: [droplet]
+
+TASK [docker : Authenticate with Docker Hub] ***********************************
+ok: [droplet]
+
+TASK [docker : Create Docker proxy network] ************************************
+ok: [droplet]
+
+TASK [traefik : Validating arguments against arg spec 'main' - Deploy the Traefik reverse proxy stack with Let's Encrypt.] ***
+ok: [droplet]
+
+TASK [traefik : Ensure letsencrypt storage directory exists] *******************
+ok: [droplet]
+
+TASK [traefik : Create acme.json with correct permissions] *********************
+ok: [droplet]
+
+TASK [traefik : Deploy socket proxy nginx config] ******************************
+ok: [droplet]
+
+TASK [traefik : Deploy Traefik docker-compose.yml] *****************************
+ok: [droplet]
+
+TASK [traefik : Start Traefik stack] *******************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Image traefik:v3.6.13
+Pulling'. Please report this at https://github.com/ansible-collections/communit
+y.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Image nginx:alpine
+Pulling'. Please report this at https://github.com/ansible-collections/communit
+y.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Image nginx:alpine
+Pulled'. Please report this at https://github.com/ansible-collections/community
+.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Image traefik:v3.6.13
+Pulled'. Please report this at https://github.com/ansible-collections/community
+.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container proxy-socket-
+proxy-1 Recreate'. Please report this at https://github.com/ansible-collections
+/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.m
+d
+[WARNING]: Event line is missing dry-run mode marker: 'Container proxy-socket-
+proxy-1 Recreated'. Please report this at https://github.com/ansible-collection
+s/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.
+md
+[WARNING]: Event line is missing dry-run mode marker: 'Container proxy-
+traefik-1 Recreate'. Please report this at https://github.com/ansible-collectio
+ns/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report
+.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container proxy-
+traefik-1 Recreated'. Please report this at https://github.com/ansible-collecti
+ons/community.docker/issues/new?assignees=&labels=&projects=&template=bug_repor
+t.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+47de0b3baf7f_proxy-socket-proxy-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+47de0b3baf7f_proxy-socket-proxy-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+e6a572c94950_proxy-traefik-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+e6a572c94950_proxy-traefik-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+changed: [droplet]
+
+TASK [Deploy WordPress sites] **************************************************
+
+TASK [wordpress : Validating arguments against arg spec 'main' - Deploy a WordPress site (PHP-FPM + nginx) behind Traefik.] ***
+ok: [droplet]
+
+TASK [wordpress : Create site directory] ***************************************
+ok: [droplet]
+
+TASK [wordpress : Create wp-content bind mount directory] **********************
+changed: [droplet]
+
+TASK [wordpress : Deploy nginx.conf] *******************************************
+ok: [droplet]
+
+TASK [wordpress : Deploy Dockerfile] *******************************************
+ok: [droplet]
+
+TASK [wordpress : Deploy docker-compose.yml] ***********************************
+ok: [droplet]
+
+TASK [wordpress : Deploy .env file] ********************************************
+ok: [droplet]
+
+TASK [wordpress : Remove site (with volumes) when .env changes so wp-config.php is regenerated] ***
+skipping: [droplet]
+
+TASK [wordpress : Start WordPress site] ****************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Image taotedev-wordpress
+Building'. Please report this at https://github.com/ansible-collections/communi
+ty.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'wordpress ==> ==>
+writing image dryRun-b1909932aac1c5510c044de0cb8c0f3ef049a250'. Please report
+this at https://github.com/ansible-collections/community.docker/issues/new?assi
+gnees=&labels=&projects=&template=bug_report.md
+[WARNING]: Cannot parse event from line: 'wordpress ==> ==> writing image
+dryRun-b1909932aac1c5510c044de0cb8c0f3ef049a250'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'wordpress ==> ==> naming
+to taotedev-wordpress'. Please report this at https://github.com/ansible-collec
+tions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_rep
+ort.md
+[WARNING]: Cannot parse event from line: 'wordpress ==> ==> naming to taotedev-
+wordpress'. Please report this at https://github.com/ansible-collections/commun
+ity.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Image wordpress Built'.
+Please report this at https://github.com/ansible-collections/community.docker/i
+ssues/new?assignees=&labels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container taotedev-
+wordpress-1 Recreate'. Please report this at https://github.com/ansible-collect
+ions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_repo
+rt.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container taotedev-
+wordpress-1 Recreated'. Please report this at https://github.com/ansible-collec
+tions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_rep
+ort.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container taotedev-
+nginx-1 Recreate'. Please report this at https://github.com/ansible-collections
+/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.m
+d
+[WARNING]: Event line is missing dry-run mode marker: 'Container taotedev-
+nginx-1 Recreated'. Please report this at https://github.com/ansible-collection
+s/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.
+md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+fb58296dab2b_taotedev-wordpress-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+fb58296dab2b_taotedev-wordpress-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+3488d57c8932_taotedev-nginx-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+3488d57c8932_taotedev-nginx-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Docker compose: image wordpress: Built
+changed: [droplet]
+
+TASK [wordpress : Validating arguments against arg spec 'main' - Deploy a WordPress site (PHP-FPM + nginx) behind Traefik.] ***
+ok: [droplet]
+
+TASK [wordpress : Create site directory] ***************************************
+ok: [droplet]
+
+TASK [wordpress : Create wp-content bind mount directory] **********************
+ok: [droplet]
+
+TASK [wordpress : Deploy nginx.conf] *******************************************
+ok: [droplet]
+
+TASK [wordpress : Deploy Dockerfile] *******************************************
+ok: [droplet]
+
+TASK [wordpress : Deploy docker-compose.yml] ***********************************
+ok: [droplet]
+
+TASK [wordpress : Deploy .env file] ********************************************
+ok: [droplet]
+
+TASK [wordpress : Remove site (with volumes) when .env changes so wp-config.php is regenerated] ***
+skipping: [droplet]
+
+TASK [wordpress : Start WordPress site] ****************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Image seaislandlife-
+wordpress Building'. Please report this at https://github.com/ansible-collectio
+ns/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report
+.md
+[WARNING]: Event line is missing dry-run mode marker: 'wordpress ==> ==> naming
+to seaislandlife-wordpress'. Please report this at https://github.com/ansible-c
+ollections/community.docker/issues/new?assignees=&labels=&projects=&template=bu
+g_report.md
+[WARNING]: Cannot parse event from line: 'wordpress ==> ==> naming to
+seaislandlife-wordpress'. Please report this at https://github.com/ansible-coll
+ections/community.docker/issues/new?assignees=&labels=&projects=&template=bug_r
+eport.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container seaislandlife-
+wordpress-1 Recreate'. Please report this at https://github.com/ansible-collect
+ions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_repo
+rt.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container seaislandlife-
+wordpress-1 Recreated'. Please report this at https://github.com/ansible-collec
+tions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_rep
+ort.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container seaislandlife-
+nginx-1 Recreate'. Please report this at https://github.com/ansible-collections
+/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.m
+d
+[WARNING]: Event line is missing dry-run mode marker: 'Container seaislandlife-
+nginx-1 Recreated'. Please report this at https://github.com/ansible-collection
+s/community.docker/issues/new?assignees=&labels=&projects=&template=bug_report.
+md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+ce25203c878d_seaislandlife-wordpress-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+ce25203c878d_seaislandlife-wordpress-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+867d6f5a5d86_seaislandlife-nginx-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+867d6f5a5d86_seaislandlife-nginx-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+changed: [droplet]
+
+TASK [Deploy Laravel site] *****************************************************
+skipping: [droplet]
+
+TASK [Deploy Node.js sites] ****************************************************
+
+TASK [webapp : Validating arguments against arg spec 'main' - Deploy a stateless HTTP container behind Traefik.] ***
+ok: [droplet]
+
+TASK [webapp : Create site directory] ******************************************
+ok: [droplet]
+
+TASK [webapp : Deploy docker-compose.yml] **************************************
+--- before: /opt/sites/bitsalt/docker-compose.yml
++++ after: /home/jeff/.ansible/tmp/ansible-local-26602w0_tt0s6/tmpbf21ltek/docker-compose.yml.j2
+@@ -1,31 +1,34 @@
++---
+ services:
+   bitsalt-web:
+-    image: bitsalt/bitsalt-prod:${IMAGE_TAG:-latest}
++    image: bitsalt/bitsalt-prod:latest
+     restart: unless-stopped
++    env_file: .env
+     labels:
+       - "traefik.enable=true"
+       - "traefik.docker.network=proxy"
+-      - "traefik.http.services.${SERVICE_NAME:-bitsalt-web}.loadbalancer.server.port=3000"
+-      # Apex domain
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.rule=Host(`${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.service=${SERVICE_NAME:-bitsalt-web}"
+-      # www redirect
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.rule=Host(`www.${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.middlewares=${SERVICE_NAME:-bitsalt}-www-redirect"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.service=${SERVICE_NAME:-bitsalt-web}"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.replacement=https://$$1"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.permanent=true"
++      - "traefik.http.services.bitsalt.loadbalancer.server.port=4321"
++      # Apex domain router
++      - "traefik.http.routers.bitsalt.rule=Host(`bitsalt.com`)"
++      - "traefik.http.routers.bitsalt.entrypoints=websecure"
++      - "traefik.http.routers.bitsalt.tls.certresolver=le"
++      - "traefik.http.routers.bitsalt.service=bitsalt"
++      # www → apex redirect (permanent 301)
++      - "traefik.http.routers.bitsalt-www.rule=Host(`www.bitsalt.com`)"
++      - "traefik.http.routers.bitsalt-www.entrypoints=websecure"
++      - "traefik.http.routers.bitsalt-www.tls.certresolver=le"
++      - "traefik.http.routers.bitsalt-www.middlewares=bitsalt-www-redirect"
++      - "traefik.http.routers.bitsalt-www.service=bitsalt"
++      - "traefik.http.middlewares.bitsalt-www-redirect.redirectregex.regex=^https://www\\.(.+)"
++      - "traefik.http.middlewares.bitsalt-www-redirect.redirectregex.replacement=https://$$1"
++      - "traefik.http.middlewares.bitsalt-www-redirect.redirectregex.permanent=true"
+     networks:
+       - proxy
+       - internal
+ 
+ networks:
+   proxy:
++    name: proxy
+     external: true
+   internal:
+     internal: true
+
+changed: [droplet]
+
+TASK [webapp : Deploy .env file] ***********************************************
+ok: [droplet]
+
+TASK [webapp : Start webapp site] **********************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Container bitsalt-
+bitsalt-web-1 Running'. Please report this at https://github.com/ansible-collec
+tions/community.docker/issues/new?assignees=&labels=&projects=&template=bug_rep
+ort.md
+ok: [droplet]
+
+TASK [webapp : Validating arguments against arg spec 'main' - Deploy a stateless HTTP container behind Traefik.] ***
+ok: [droplet]
+
+TASK [webapp : Create site directory] ******************************************
+ok: [droplet]
+
+TASK [webapp : Deploy docker-compose.yml] **************************************
+--- before: /opt/sites/bitsalt-staging/docker-compose.yml
++++ after: /home/jeff/.ansible/tmp/ansible-local-26602w0_tt0s6/tmpbnz5klfu/docker-compose.yml.j2
+@@ -1,31 +1,25 @@
++---
+ services:
+-  bitsalt-web:
+-    image: bitsalt/bitsalt-prod:${IMAGE_TAG:-latest}
++  bitsalt-staging-web:
++    image: bitsalt/bitsalt-prod:staging
+     restart: unless-stopped
++    env_file: .env
+     labels:
+       - "traefik.enable=true"
+       - "traefik.docker.network=proxy"
+-      - "traefik.http.services.${SERVICE_NAME:-bitsalt-web}.loadbalancer.server.port=3000"
+-      # Apex domain
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.rule=Host(`${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}.service=${SERVICE_NAME:-bitsalt-web}"
+-      # www redirect
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.rule=Host(`www.${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.middlewares=${SERVICE_NAME:-bitsalt}-www-redirect"
+-      - "traefik.http.routers.${SERVICE_NAME:-bitsalt}-www.service=${SERVICE_NAME:-bitsalt-web}"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.replacement=https://$$1"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-bitsalt}-www-redirect.redirectregex.permanent=true"
++      - "traefik.http.services.bitsalt-staging.loadbalancer.server.port=4321"
++      # Apex domain router
++      - "traefik.http.routers.bitsalt-staging.rule=Host(`dev.bitsalt.com`)"
++      - "traefik.http.routers.bitsalt-staging.entrypoints=websecure"
++      - "traefik.http.routers.bitsalt-staging.tls.certresolver=le"
++      - "traefik.http.routers.bitsalt-staging.service=bitsalt-staging"
+     networks:
+       - proxy
+       - internal
+ 
+ networks:
+   proxy:
++    name: proxy
+     external: true
+   internal:
+     internal: true
+
+changed: [droplet]
+
+TASK [webapp : Deploy .env file] ***********************************************
+changed: [droplet]
+
+TASK [webapp : Start webapp site] **********************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Container bitsalt-
+staging-bitsalt-web-1 Recreate'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container bitsalt-
+staging-bitsalt-web-1 Recreated'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+81b21df21b22_bitsalt-staging-bitsalt-web-1 Starting'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+[WARNING]: Event line is missing dry-run mode marker: 'Container
+81b21df21b22_bitsalt-staging-bitsalt-web-1 Started'. Please report this at
+https://github.com/ansible-collections/community.docker/issues/new?assignees=&l
+abels=&projects=&template=bug_report.md
+changed: [droplet]
+
+TASK [webapp : Validating arguments against arg spec 'main' - Deploy a stateless HTTP container behind Traefik.] ***
+ok: [droplet]
+
+TASK [webapp : Create site directory] ******************************************
+ok: [droplet]
+
+TASK [webapp : Deploy docker-compose.yml] **************************************
+--- before: /opt/sites/mybizmag/docker-compose.yml
++++ after: /home/jeff/.ansible/tmp/ansible-local-26602w0_tt0s6/tmpycs7qil9/docker-compose.yml.j2
+@@ -1,42 +1,34 @@
+-# ── Configuration ─────────────────────────────────────────────────────────────
+-# Set these in a .env file on each server (never commit .env to version control):
+-#
+-#   IMAGE_TAG=latest          # "staging" on your staging server
+-#   SITE_DOMAIN=example.com   # apex domain Traefik routes traffic to
+-#   SERVICE_NAME=myapp        # unique name for this deployment instance
+-#
+-# See CONFIG.md for full setup instructions.
+-#
+-# ──────────────────────────────────────────────────────────────────────────────
+-
++---
+ services:
+-  app:
+-    image: bitsalt/mybizmag:${IMAGE_TAG:-latest}
++  mybizmag-web:
++    image: bitsalt/mybizmag:latest
+     restart: unless-stopped
++    env_file: .env
+     labels:
+       - "traefik.enable=true"
+       - "traefik.docker.network=proxy"
+-      - "traefik.http.services.${SERVICE_NAME:-mybizmag}.loadbalancer.server.port=80"
+-      # Apex domain
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}.rule=Host(`${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}.service=${SERVICE_NAME:-mybizmag}"
+-      # www redirect
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}-www.rule=Host(`www.${SITE_DOMAIN}`)"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}-www.entrypoints=websecure"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}-www.tls.certresolver=le"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}-www.middlewares=${SERVICE_NAME:-mybizmag}-www-redirect"
+-      - "traefik.http.routers.${SERVICE_NAME:-mybizmag}-www.service=${SERVICE_NAME:-mybizmag}"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-mybizmag}-www-redirect.redirectregex.regex=^https://www\\.(.+)"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-mybizmag}-www-redirect.redirectregex.replacement=https://$$1"
+-      - "traefik.http.middlewares.${SERVICE_NAME:-mybizmag}-www-redirect.redirectregex.permanent=true"
++      - "traefik.http.services.mybizmag.loadbalancer.server.port=80"
++      # Apex domain router
++      - "traefik.http.routers.mybizmag.rule=Host(`mybusinessmagnet.tech`)"
++      - "traefik.http.routers.mybizmag.entrypoints=websecure"
++      - "traefik.http.routers.mybizmag.tls.certresolver=le"
++      - "traefik.http.routers.mybizmag.service=mybizmag"
++      # www → apex redirect (permanent 301)
++      - "traefik.http.routers.mybizmag-www.rule=Host(`www.mybusinessmagnet.tech`)"
++      - "traefik.http.routers.mybizmag-www.entrypoints=websecure"
++      - "traefik.http.routers.mybizmag-www.tls.certresolver=le"
++      - "traefik.http.routers.mybizmag-www.middlewares=mybizmag-www-redirect"
++      - "traefik.http.routers.mybizmag-www.service=mybizmag"
++      - "traefik.http.middlewares.mybizmag-www-redirect.redirectregex.regex=^https://www\\.(.+)"
++      - "traefik.http.middlewares.mybizmag-www-redirect.redirectregex.replacement=https://$$1"
++      - "traefik.http.middlewares.mybizmag-www-redirect.redirectregex.permanent=true"
+     networks:
+       - proxy
+       - internal
+ 
+ networks:
+   proxy:
++    name: proxy
+     external: true
+   internal:
+     internal: true
+
+changed: [droplet]
+
+TASK [webapp : Deploy .env file] ***********************************************
+ok: [droplet]
+
+TASK [webapp : Start webapp site] **********************************************
+[WARNING]: Event line is missing dry-run mode marker: 'Container mybizmag-app-1
+Running'. Please report this at https://github.com/ansible-collections/communit
+y.docker/issues/new?assignees=&labels=&projects=&template=bug_report.md
+ok: [droplet]
+
+TASK [Deploy FastAPI sites] ****************************************************
+skipping: [droplet]
+
+PLAY RECAP *********************************************************************
+droplet                    : ok=51   changed=9    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+
+Playbook run took 0 days, 0 hours, 1 minutes, 58 seconds
