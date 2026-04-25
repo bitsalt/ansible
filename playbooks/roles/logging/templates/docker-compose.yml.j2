@@ -1,0 +1,23 @@
+---
+# Managed by Ansible — do not edit by hand.
+services:
+  vector:
+    image: {{ logging_vector_image }}
+    container_name: logging-vector
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      # Read-only socket access is effectively root on the host; accepted
+      # for a shipper we control. If a future site needs tighter isolation,
+      # front this with a socket-proxy sidecar like the one /opt/proxy/ uses.
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./vector.yaml:/etc/vector/vector.yaml:ro
+      - vector_data:/var/lib/vector
+{% if logging_traefik_access_enabled %}
+      - {{ logging_traefik_access_path }}:/var/log/traefik/access.log:ro
+{% endif %}
+    command: ["--config", "/etc/vector/vector.yaml"]
+
+volumes:
+  vector_data:

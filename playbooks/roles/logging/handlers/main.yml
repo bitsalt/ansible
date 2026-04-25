@@ -1,0 +1,16 @@
+---
+# recreate: always is intentional and stays — this handler fires only when
+# one of the templated files changes (.env, vector.yaml, or
+# docker-compose.yml). compose v2 detects docker-compose.yml changes and
+# hashes env_file contents on its own, but vector.yaml is bind-mounted and
+# compose cannot see changes to bind-mounted file content. `auto` would
+# miss vector.yaml edits and leave Vector running the old config; `always`
+# guarantees all three paths are picked up. The addendum §4 ban on
+# recreate: always applies to tasks that run every play; this handler only
+# fires on change. (Same rationale as the traefik handler.)
+- name: Restart logging
+  community.docker.docker_compose_v2:
+    project_src: "{{ logging_dir }}"
+    state: present
+    pull: always
+    recreate: always

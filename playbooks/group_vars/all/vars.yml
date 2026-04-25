@@ -18,6 +18,14 @@ docker_proxy_subnet: "172.21.0.0/16"
 traefik_image: traefik:v3.6.13
 traefik_acme_email: "{{ vault_traefik_acme_email }}"
 
+# Logging (Vector → Grafana Cloud Loki)
+# Flip logging_enabled to true after populating the three vault_loki_* keys
+# in group_vars/all/vault.yml.
+logging_enabled: true
+logging_loki_endpoint: "{{ vault_loki_endpoint }}"
+logging_loki_user: "{{ vault_loki_user }}"
+logging_loki_token: "{{ vault_loki_token }}"
+
 # WordPress defaults (can be overridden per site)
 wordpress_default_image: wordpress:6.9.4-php8.2-fpm
 

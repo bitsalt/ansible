@@ -1,0 +1,50 @@
+---
+# =============================================================================
+# Role: logging
+# Deploys the Vector log shipper stack into /opt/logging/ and ships to
+# Grafana Cloud Loki. Single-container compose project. Reads every other
+# container's stdout/stderr via the Docker socket (no per-site wiring).
+# =============================================================================
+
+- name: Ensure logging directory exists
+  ansible.builtin.file:
+    path: "{{ logging_dir }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0750"
+
+- name: Deploy logging .env (Loki credentials)
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ logging_dir }}/.env"
+    owner: root
+    group: root
+    mode: "0600"
+  no_log: true
+  notify: Restart logging
+
+- name: Deploy vector.yaml
+  ansible.builtin.template:
+    src: vector.yaml.j2
+    dest: "{{ logging_dir }}/vector.yaml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart logging
+
+- name: Deploy logging docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ logging_dir }}/docker-compose.yml"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Restart logging
+
+- name: Start logging stack
+  community.docker.docker_compose_v2:
+    project_src: "{{ logging_dir }}"
+    state: present
+    pull: always
+    recreate: auto
