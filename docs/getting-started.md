@@ -98,6 +98,22 @@ Both should exit 0. If either flags an issue, fix it (or document the ignore inl
 
 ---
 
+## Logging is opt-in
+
+The `logging` role ships container stdout/stderr (and optionally Traefik's access log) to Grafana Cloud Loki via a single Vector container at `/opt/logging/`. **It is off by default** so a fresh clone applies cleanly before Loki credentials exist. If you've cloned this repo and run `ansible-playbook site.yml`, no log shipping is happening yet — that's expected.
+
+To turn it on:
+
+1. Populate `vault_logging_loki_endpoint`, `vault_logging_loki_user`, and `vault_logging_loki_token` in `playbooks/group_vars/all/vault.yml` (`ansible-vault edit`). The token is treated as `no_log` — never echo it.
+2. Set `logging_enabled: true` in `playbooks/group_vars/all/vars.yml`.
+3. Re-run the playbook (`--tags logging` is sufficient for an incremental change).
+
+If any of the three Loki vault values are missing when the role runs, it fails at role entry with a clear error rather than starting a silently-misconfigured Vector — that's intentional.
+
+For depth: [architecture.md § Logging](architecture.md#logging-cross-cutting) covers what the role does, [ADR 0008](adr/0008-centralized-logging-vector-loki.md) covers why Vector and Grafana Cloud Loki, and [requirements.md NFR7](requirements.md#nfr7--observability-centralized-logging) covers the requirement the role satisfies.
+
+---
+
 ## Read before you write
 
 Before making any non-trivial change, read:

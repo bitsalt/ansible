@@ -23,6 +23,7 @@ A few mental hooks that will make the rest faster:
 5. **All secrets are in the vault.** `playbooks/group_vars/all/vault.yml`, encrypted with `ansible-vault`. Tasks that render or accept vault values carry `no_log: true`. ([ADR 0004](adr/0004-ansible-vault-only-secret-store.md).)
 6. **Webapp ownership boundary.** For Node.js / FastAPI sites, Ansible owns `.env` and the app repo owns `docker-compose.yml`. Don't reintroduce Ansible-templated compose for webapps. ([ADR 0006](adr/0006-webapp-ownership-boundary.md).)
 7. **Bootstrap script does what Ansible can't safely do mid-play.** SSH hardening, UFW, Fail2ban, unattended-upgrades all happen in `bootstrap.sh` *before* Ansible runs. ([ADR 0007](adr/0007-pre-ansible-ssh-hardening.md).)
+8. **Logging is cross-cutting and opt-in.** A single `logging` role deploys one Vector container that reads every other container's stdout/stderr via the Docker socket and ships to Grafana Cloud Loki. It's off by default (`logging_enabled: false`) so a fresh clone applies cleanly without Loki credentials; flip it on once `vault_logging_loki_endpoint`, `vault_logging_loki_user`, and `vault_logging_loki_token` are populated. Adding a site does not require touching the logging role. ([ADR 0008](adr/0008-centralized-logging-vector-loki.md), [NFR7](requirements.md#nfr7--observability-centralized-logging), [architecture § Logging](architecture.md#logging-cross-cutting); see also [getting-started.md § Logging is opt-in](getting-started.md#logging-is-opt-in).)
 
 ---
 

@@ -155,6 +155,19 @@ The system must have basic Droplet monitoring:
 
 - Single Droplet at 4–8 GB RAM is the operating envelope. Architectural decisions that would require multi-Droplet or paid container registries (vs. Docker Hub) are out of scope absent an explicit ADR.
 
+### NFR7 — Observability (centralized logging)
+
+The system must support centralized aggregation of container logs so that operational issues spanning multiple sites, or surviving past a container's local log rotation, are diagnosable without per-container `docker logs` SSH sessions.
+
+- **Coverage.** Stdout/stderr from every site container on the Droplet is captured cross-cuttingly, without per-site wiring. Adding a site does not require touching the logging configuration.
+- **Opt-in, default off.** The capability is off by default so a fresh clone of the repo applies cleanly before log-destination credentials are populated. Operators opt in explicitly once credentials exist in the vault.
+- **Vault-sourced credentials.** Credentials for the log destination live only in the Ansible Vault. Missing credentials must fail loudly at role entry rather than producing a silently-misconfigured pipeline. Tokens carry `no_log: true` per NFR1 / FR5.
+- **Multi-deployment separation.** A configurable deployment label is emitted on every stream so a single log-destination tenant can host prod, staging, and any future hosts without their streams colliding.
+- **PII redaction backstop.** The shipping pipeline scrubs the most common credential / header leak patterns (e.g., `Authorization`, `Cookie`, `Set-Cookie`, `X-API-Key`) before egress. This is a defensive net, not the primary defense — apps remain responsible for not logging sensitive values upstream.
+- **Implementation reference.** Currently realized by the `logging` role (Vector → Grafana Cloud Loki); design rationale and alternatives in [ADR 0008](adr/0008-centralized-logging-vector-loki.md). The requirement is destination-agnostic — a future change of shipper or sink is a config-level change, not a requirement change.
+
+> **Status:** *implemented, default off.* Role landed 2026-04-24; opt-in by setting `logging_enabled: true` once vault carries the Loki values.
+
 ---
 
 ## Out of scope
@@ -165,6 +178,7 @@ The system must have basic Droplet monitoring:
 - CDN, WAF, or DDoS mitigation beyond what Traefik + UFW + Fail2ban provide.
 - Email delivery infrastructure for hosted sites. Each app handles its own (e.g., Mailgun, SES) via env vars.
 - Application-level monitoring (APM, error tracking). Out of scope for the infra repo; per-app concern.
+- Compliance-grade or audit-grade logging (guaranteed delivery, regulatory retention, tamper-evident integrity). NFR7 is diagnostic-grade — log loss during a shipper outage or destination outage is acceptable. If contractual or regulatory requirements emerge, NFR7 must be revisited (see ADR 0008 "Reconsider if").
 - Any direct provisioning of DO resources via Terraform or DO API. The Droplet, Managed DBs, Spaces buckets, and DNS records are provisioned manually in the DO dashboard. Bitsalt-ansible operates against what's there.
 
 ---

@@ -36,7 +36,7 @@ Complete Task B drift reconciliation: re-baseline `--check --diff` against `comm
 - ✅ **M6: Author runbooks** — DevOps produced six runbooks (`bootstrap`, `add-wordpress-site`, `add-webapp-site`, `wordpress-updates`, `rollback`, `vault-edit`).
 - ✅ **M7: Author ops docs** — DevOps produced three ops docs (`ansible.md`, `ci.md`, `users.md`).
 - ✅ **M8: Author `.agent-context.md`, sprint file, dashboard row** — PM (this step).
-- 🟡 **M9: Tech Writer step** — README, getting-started, onboarding (in flight after M8 lands).
+- ✅ **M9: Tech Writer step** — README, getting-started, onboarding produced; further expanded 2026-04-25 with logging coverage.
 
 ---
 
@@ -58,6 +58,10 @@ Other roles append proposals here; PM lands them at the next sprint review or on
 ## Decisions log
 
 New entries at the top.
+
+### 2026-04-25
+
+- **Logging gap-fix arc complete.** The original Phase 2 migration roles ran before the `logging` role merged in mid-flight (see 2026-04-24 entry), so their artifacts had no coverage of it. Today's pass closed those gaps with four backfill artifacts: ADR 0008 `docs/adr/0008-centralized-logging-vector-loki.md` (Architect; see `agent-logs/architect.log.md`), NFR7 added to `docs/requirements.md` (BA; see `agent-logs/business-analyst.log.md`), expanded logging coverage in `docs/getting-started.md` and `docs/onboarding.md` (Tech Writer; see `agent-logs/technical-writer.log.md`), and this PM bookkeeping pass landing M9 ✅ plus updates to `.agent-context.md`, `BitSalt-Projects.md`, and `AGENT-MIGRATION-NOTES.md` (see `agent-logs/project-manager.log.md`). Phase 2 pilot #1 is now genuinely complete on the platform side; legacy `CLAUDE.md` retire awaits Jeff's end-to-end sign-off.
 
 ### 2026-04-24
 
