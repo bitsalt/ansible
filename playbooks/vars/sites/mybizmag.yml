@@ -1,0 +1,13 @@
+---
+mybizmag:
+  enabled: true
+  site_name: mybizmag
+  site_domain: mybusinessmagnet.tech
+  image: "bitsalt/mybizmag:latest"
+  port: 80
+  env_vars:
+    NODE_ENV: production
+    PORT: 80
+    TRUST_PROXY: 1
+    SITE_DOMAIN: mybusinessmagnet.tech
+    SERVICE_NAME: mybizmag

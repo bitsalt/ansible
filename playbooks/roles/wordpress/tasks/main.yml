@@ -1,0 +1,79 @@
+---
+# =============================================================================
+# Role: wordpress
+# Loops over wordpress_sites list defined in site.yml.
+# Each iteration deploys one WordPress site's directory, Compose file, and
+# Vault-sourced .env file.
+# =============================================================================
+
+- name: Create site directory
+  ansible.builtin.file:
+    path: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: directory
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0755"
+
+# No recurse: true on the task below — WordPress writes files at 0644;
+# recursively re-applying 0755 would flip every file's mode on every play,
+# producing cosmetic `changed` churn. The bind-mount dir itself is what we
+# own; file modes inside are WordPress's concern.
+- name: Create wp-content bind mount directory
+  ansible.builtin.file:
+    path: "{{ sites_base_dir }}/{{ item.site_name }}/wp-content"
+    state: directory
+    owner: "33"
+    group: "33"
+    mode: "0755"
+
+- name: Deploy nginx.conf
+  ansible.builtin.template:
+    src: nginx.conf.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/nginx.conf"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0644"
+
+- name: Deploy Dockerfile
+  ansible.builtin.template:
+    src: Dockerfile.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/Dockerfile"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0644"
+  register: dockerfile_result
+
+- name: Deploy docker-compose.yml
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/docker-compose.yml"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0644"
+
+- name: Deploy .env file
+  ansible.builtin.template:
+    src: env.j2
+    dest: "{{ sites_base_dir }}/{{ item.site_name }}/.env"
+    owner: "{{ deploy_user }}"
+    group: "{{ deploy_user }}"
+    mode: "0600"
+  register: env_result
+  no_log: true
+
+- name: Remove site (with volumes) when .env changes so wp-config.php is regenerated
+  community.docker.docker_compose_v2:
+    project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: absent
+    remove_volumes: true
+  when: env_result.changed
+
+- name: Start WordPress site
+  community.docker.docker_compose_v2:
+    project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
+    state: present
+    # build: always is banned on always-run tasks (addendum §4). Force a
+    # rebuild only when the Dockerfile changed; otherwise fall back to
+    # compose's own policy (builds only if the image is missing locally).
+    build: "{{ 'always' if dockerfile_result.changed else 'policy' }}"
+    recreate: auto

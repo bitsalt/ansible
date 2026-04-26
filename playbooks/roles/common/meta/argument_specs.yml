@@ -1,0 +1,35 @@
+---
+# =============================================================================
+# common role — input schema
+#
+# Validated by Ansible at role entry. Reads four non-secret global paths
+# from group_vars/all/vars.yml; declaring them here earns type checks and
+# documentation. The role also installs a fixed list of apt packages,
+# which is not parameterized (see tasks/main.yml).
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Provision base directory structure and baseline apt packages.
+    description: >
+      Creates /opt/sites, /opt/proxy, /opt/backups, /opt/scripts (owned by
+      root) and installs the small set of apt packages every downstream
+      role depends on (curl, ca-certificates, gnupg, python3-pip, acl,
+      mysql-client). Does not manage users — those are bootstrapped.
+    options:
+      sites_base_dir:
+        type: str
+        required: true
+        description: Base directory containing per-site subdirectories.
+      proxy_dir:
+        type: str
+        required: true
+        description: Base directory for the Traefik stack.
+      backup_dir:
+        type: str
+        required: true
+        description: Base directory for backup artifacts (mode 0700).
+      scripts_dir:
+        type: str
+        required: true
+        description: Base directory for operational scripts (mode 0750).

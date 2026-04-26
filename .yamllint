@@ -1,0 +1,18 @@
+---
+# yamllint config for bitsalt-ansible.
+# Invoked locally and in CI. See docs/refactor.md (Task A2).
+
+extends: default
+
+rules:
+  # 80 is punitive for Ansible with Jinja expressions and long dict keys.
+  # 160 still catches genuinely-runaway lines.
+  line-length:
+    max: 160
+    level: error
+
+ignore: |
+  # Ansible-vault encrypted; first line is the vault header, not `---`.
+  playbooks/group_vars/all/vault.yml
+  # Legacy pre-webapp-role layout, not active (see addendum §project-specific).
+  v1/

@@ -1,0 +1,16 @@
+---
+# =============================================================================
+# docker role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml, group_vars/all/vault.yml) override these. Kept
+# here so the role still functions if a group_vars entry is accidentally
+# removed.
+#
+# vault_dockerhub_username and vault_dockerhub_token are intentionally not
+# defaulted — they are vault-sourced and must fail loudly at role entry if
+# absent rather than silently defaulting to an empty string.
+# =============================================================================
+
+docker_proxy_network: proxy
+deploy_user: deploy

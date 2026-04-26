@@ -1,0 +1,13 @@
+---
+bitsalt:
+  enabled: true
+  site_name: bitsalt
+  site_domain: bitsalt.com
+  image: "bitsalt/bitsalt-prod:latest"
+  port: 4321
+  env_vars:
+    NODE_ENV: production
+    PORT: 4321
+    TRUST_PROXY: 1
+    SITE_DOMAIN: bitsalt.com
+    SERVICE_NAME: bitsalt

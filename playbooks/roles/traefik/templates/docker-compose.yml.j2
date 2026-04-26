@@ -1,0 +1,45 @@
+---
+services:
+  socket-proxy:
+    image: nginx:alpine
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./socket-proxy.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - socket-proxy
+
+  traefik:
+    image: {{ traefik_image }}
+    restart: unless-stopped
+    depends_on:
+      - socket-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./letsencrypt:/letsencrypt
+    command:
+      - --providers.docker=true
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.endpoint=tcp://socket-proxy:2375
+      - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      - --entrypoints.web.forwardedHeaders.trustedIPs={{ docker_proxy_subnet }}
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.forwardedHeaders.trustedIPs={{ docker_proxy_subnet }}
+      - --certificatesresolvers.le.acme.tlschallenge=true
+      - --certificatesresolvers.le.acme.email={{ traefik_acme_email }}
+      - --certificatesresolvers.le.acme.storage=/letsencrypt/acme.json
+      - --log.level=INFO
+    networks:
+      - proxy
+      - socket-proxy
+
+networks:
+  proxy:
+    name: {{ docker_proxy_network }}
+    external: true
+  socket-proxy:
+    internal: true

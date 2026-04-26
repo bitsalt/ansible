@@ -1,0 +1,86 @@
+---
+# =============================================================================
+# laravel role — input schema
+#
+# Validated by Ansible at role entry. Callers that omit required fields or
+# pass the wrong type fail loudly here instead of silently producing a
+# malformed docker-compose.yml or .env.
+#
+# Unlike webapp and wordpress, this role is NOT looped — it reads
+# `laravel_site` directly from the play scope (see site.yml). Each run
+# therefore covers at most one Laravel site.
+# =============================================================================
+
+argument_specs:
+  main:
+    short_description: Deploy a Laravel site (PHP FPM + optional queue worker) behind Traefik.
+    description: >
+      Deploys one Laravel site: site directory, bind-mounted storage dir,
+      templated docker-compose.yml (app + optional queue worker), .env file
+      with DB credentials, and an artisan schedule:run cron entry for the
+      deploy user.
+    options:
+      laravel_site:
+        description: The Laravel site config dict.
+        type: dict
+        required: true
+        options:
+          enabled:
+            type: bool
+            required: true
+            description: Gate checked in site.yml; when false, the role is skipped.
+          site_name:
+            type: str
+            required: true
+            description: Short identifier; used in directory and Traefik router names.
+          site_domain:
+            type: str
+            required: true
+            description: Public hostname; becomes the Traefik Host() rule.
+          laravel_image:
+            type: str
+            required: true
+            description: Docker image reference, e.g. `org/repo:tag`.
+          laravel_app_env:
+            type: str
+            required: true
+            choices: [production, staging, local]
+            description: Value of APP_ENV in .env.
+          laravel_app_debug:
+            type: str
+            required: true
+            choices: ["true", "false"]
+            description: >
+              Value of APP_DEBUG in .env. Declared as a string, not a bool,
+              because Ansible renders Python booleans as "True"/"False"
+              (capital first letter), which Laravel's .env parser rejects.
+          laravel_app_key:
+            type: str
+            required: true
+            no_log: true
+            description: Laravel APP_KEY; sourced from vault.
+          laravel_db_host:
+            type: str
+            required: true
+            description: MySQL host (hostname only; port is a separate field).
+          laravel_db_port:
+            type: str
+            required: true
+            description: MySQL port. String type so Jinja-sourced vault values flow through unchanged.
+          laravel_db_name:
+            type: str
+            required: true
+            description: MySQL database name.
+          laravel_db_user:
+            type: str
+            required: true
+            description: MySQL user.
+          laravel_db_password:
+            type: str
+            required: true
+            no_log: true
+            description: MySQL password; sourced from vault.
+          laravel_queue_enabled:
+            type: bool
+            required: true
+            description: When true, compose runs an extra queue-worker service.

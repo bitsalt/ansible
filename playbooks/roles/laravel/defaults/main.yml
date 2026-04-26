@@ -1,0 +1,12 @@
+---
+# =============================================================================
+# laravel role defaults
+#
+# Role-internal safety-net values. Higher-precedence sources
+# (group_vars/all/vars.yml, per-site vars files) override these. Kept here
+# so the role still functions if a group_vars entry is accidentally removed.
+# =============================================================================
+
+sites_base_dir: /opt/sites
+deploy_user: deploy
+docker_proxy_network: proxy

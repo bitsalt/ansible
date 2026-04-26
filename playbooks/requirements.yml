@@ -1,0 +1,17 @@
+---
+# =============================================================================
+# Ansible Galaxy collection requirements
+#
+# Install with:
+#   ansible-galaxy collection install -r requirements.yml
+#
+# Required before running any playbooks.
+# =============================================================================
+
+collections:
+  # Pinned to an exact version per addendum §12: community.docker has a
+  # history of breaking minor releases. 5.2.0 has clean --check mode;
+  # 3.7.0 (and other pre-3.10 versions) corrupt dry-run output with
+  # "missing dry-run mode marker" warnings and falsely report changes.
+  - name: community.docker
+    version: "==5.2.0"

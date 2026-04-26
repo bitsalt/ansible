@@ -1,0 +1,12 @@
+---
+node_site_1:
+  enabled: false        # set to true when image and credentials are ready
+  site_name: node-site-1
+  site_domain: nodesite1.com
+  image: "yourdockerhub/node-site-1:latest"
+  port: 3000
+  env_vars:
+    NODE_ENV: production
+    PORT: 3000
+    TRUST_PROXY: 1
+    DATABASE_URL: "postgresql://node1_user:{{ vault_node_site_1_db_password }}@{{ vault_pg_host }}:{{ vault_pg_port }}/node_site_1?sslmode=require"

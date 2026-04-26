@@ -1,0 +1,18 @@
+---
+# ansible-lint config for bitsalt-ansible.
+# Invoked locally and in CI. See docs/refactor.md (Task A2).
+
+exclude_paths:
+  # Legacy pre-webapp-role layout, not active (see addendum §project-specific).
+  - v1/
+  # Galaxy collections requirements file; ansible-lint mis-parses it as a playbook.
+  - playbooks/requirements.yml
+  # Ansible-vault encrypted; linter can't inspect without the vault password.
+  - playbooks/group_vars/all/vault.yml
+
+skip_list:
+  # wordpress role: "Remove site (with volumes) when .env changes" fires on
+  # env_result.changed and must run *before* "Start WordPress site" in the
+  # same iteration so wp-config.php is regenerated. Handlers flush at play
+  # end, so handler semantics do not fit this case.
+  - no-handler

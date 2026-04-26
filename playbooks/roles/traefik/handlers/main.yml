@@ -1,0 +1,16 @@
+---
+# recreate: always is intentional and stays — this handler fires only when
+# one of the templated config files changes (docker-compose.yml or
+# socket-proxy.conf). compose v2 detects docker-compose.yml changes on its
+# own, but the nginx socket-proxy container bind-mounts socket-proxy.conf,
+# and compose cannot see changes to bind-mounted file content — only to
+# the compose file itself. `auto` would miss socket-proxy.conf edits and
+# leave nginx serving the old config; `always` guarantees both paths are
+# picked up. The addendum §4 ban on recreate: always applies to tasks that
+# run on every play; this handler only runs when a change is detected.
+- name: Restart traefik
+  community.docker.docker_compose_v2:
+    project_src: "{{ proxy_dir }}"
+    state: present
+    pull: always
+    recreate: always
