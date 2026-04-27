@@ -1,12 +1,12 @@
 # Onboarding
 
-End-to-end onboarding for a new operator joining bitsalt-ansible. Audience: someone with general DevOps / Ansible experience but zero context on this specific project. If you've been around the project for a while and just need to set up a new control node, [getting-started.md](getting-started.md) is the faster path.
+End-to-end onboarding for a new operator joining the `ansible` project (BitSalt's infra-Ansible repo, formerly `bitsalt-ansible`). Audience: someone with general DevOps / Ansible experience but zero context on this specific project. If you've been around the project for a while and just need to set up a new control node, [getting-started.md](getting-started.md) is the faster path.
 
 ---
 
 ## What this project is
 
-bitsalt-ansible provisions a single DigitalOcean Droplet that hosts BitSalt's portfolio of client and internal sites. WordPress and Laravel sites talk to a DO Managed MySQL cluster; Node.js and FastAPI sites talk to a DO Managed PostgreSQL cluster. A shared Traefik reverse proxy fronts every site, terminates TLS via Let's Encrypt, and routes by domain using Docker labels. Ansible is the source of truth for what the Droplet should look like.
+This `ansible` project provisions a single DigitalOcean Droplet that hosts BitSalt's portfolio of client and internal sites. WordPress and Laravel sites talk to a DO Managed MySQL cluster; Node.js and FastAPI sites talk to a DO Managed PostgreSQL cluster. A shared Traefik reverse proxy fronts every site, terminates TLS via Let's Encrypt, and routes by domain using Docker labels. Ansible is the source of truth for what the Droplet should look like.
 
 For the full system shape, read [architecture.md](architecture.md). For the *why* behind the non-obvious decisions, read the [ADRs](adr/).
 
@@ -30,7 +30,7 @@ A few mental hooks that will make the rest faster:
 ## Layout in one screen
 
 ```
-bitsalt-ansible/
+ansible/
 ├── README.md                       Top-level entry point (read first)
 ├── bootstrap.sh                    First-boot Droplet hardening
 ├── requirements.txt                Pinned control-node tooling
@@ -40,20 +40,19 @@ bitsalt-ansible/
 ├── docs/
 │   ├── architecture.md             System architecture
 │   ├── requirements.md             What the system must do
-│   ├── bitsalt-ansible.md          Sprint file
+│   ├── ansible.md                  Sprint file
 │   ├── adr/                        Architectural Decision Records
 │   ├── interfaces/                 Component / cross-team boundaries
 │   ├── runbooks/                   Step-by-step procedures
 │   ├── ops/                        Operational reference
 │   ├── reference/                  Lookup-shaped docs (site inventory, etc.)
 │   └── user-stories/               Per-capability stories
-├── playbooks/                      Source of truth — current Ansible structure
-│   ├── ansible.cfg, site.yml, requirements.yml
-│   ├── inventory/hosts.yml
-│   ├── group_vars/all/{vars,vault}.yml
-│   ├── vars/sites/<site>.yml       One file per site (named-dict pattern)
-│   └── roles/                      common, docker, traefik, wordpress, laravel, webapp, logging
-└── v1/                             Legacy structure, retained for reference
+└── playbooks/                      Source of truth — current Ansible structure
+    ├── ansible.cfg, site.yml, requirements.yml
+    ├── inventory/hosts.yml
+    ├── group_vars/all/{vars,vault}.yml
+    ├── vars/sites/<site>.yml       One file per site (named-dict pattern)
+    └── roles/                      common, docker, traefik, wordpress, laravel, webapp, logging
 ```
 
 ---
@@ -72,7 +71,7 @@ Follow [getting-started.md](getting-started.md). It covers:
 
 ## What "active work" looks like
 
-The single source of truth for in-flight work is the [sprint file](bitsalt-ansible.md). It contains:
+The single source of truth for in-flight work is the [sprint file](ansible.md). It contains:
 
 - **Current sprint goal** — one sentence describing what done looks like this sprint.
 - **Tasks** — active work and migration tasks with status (✅ / 🟡 / ⬜ / ❌).
@@ -94,7 +93,7 @@ Anything substantive (new role, new site, infra-shaped change):
 
 1. Pick the role this falls under: BA / Architect / Security / QA / Designer / DevOps / Developer / Tech Writer / Content Writer / PM. (Most infra changes are DevOps.)
 2. Read the role file at `~/projects/platform/.claude/agents/<role>.md` for the writes allowlist and stop conditions.
-3. Make the change on a feature branch named `<role>/bitsalt-ansible/<slug>`.
+3. Make the change on a feature branch named `<role>/ansible/<slug>`.
 4. Commit with a focused message. Don't push — Jeff pushes and opens PRs.
 5. Update the sprint file's Open Questions or sprint task list as appropriate.
 

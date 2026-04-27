@@ -1,4 +1,4 @@
-# bitsalt-ansible — Requirements
+# ansible — Requirements
 
 Requirements for the BitSalt site-hosting infrastructure. This document captures *what* the system must do; design decisions live in `docs/architecture.md` and `docs/adr/` (Architect-owned).
 
@@ -22,8 +22,8 @@ The system is currently in production for `taotedev.com`, with three other custo
 ## Users / personas
 
 - **Jeff (operator / admin).** Primary user. Adds and maintains sites, runs Ansible, edits the vault, executes one-off WP-CLI / runtime tasks via Bash on the Droplet, schedules and supervises maintenance windows.
-- **Site visitors (indirect).** End users of the hosted sites. Not direct users of bitsalt-ansible, but the system's correctness affects their experience (uptime, SSL, page load, content delivery).
-- **GitHub Actions CI (machine).** Per-repo deploy pipelines for Laravel and Node.js / FastAPI sites SSH into the Droplet as the `deploy` user, pull updated images, and bring up containers. Bitsalt-ansible owns the environment those pipelines deploy into.
+- **Site visitors (indirect).** End users of the hosted sites. Not direct users of this project, but the system's correctness affects their experience (uptime, SSL, page load, content delivery).
+- **GitHub Actions CI (machine).** Per-repo deploy pipelines for Laravel and Node.js / FastAPI sites SSH into the Droplet as the `deploy` user, pull updated images, and bring up containers. This project owns the environment those pipelines deploy into.
 
 ---
 

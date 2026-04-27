@@ -74,7 +74,7 @@ Take care of the items the script prints at the end:
 From the control node, with the inventory pointing at the new Droplet on the custom port:
 
 ```bash
-cd ~/projects/bitsalt-ansible/playbooks
+cd ~/projects/ansible/playbooks
 ansible-playbook site.yml --ask-vault-pass --tags common,docker,traefik
 ```
 

@@ -9,7 +9,7 @@
    - Source server access (SSH or equivalent) is confirmed.
    - DO Managed MySQL has a database created for the site; credentials are in the vault.
    - The Droplet's IP is added to the DO Managed MySQL trusted-sources list.
-2. Add the site to bitsalt-ansible per `add-wordpress-site.md` with `enabled: false` initially.
+2. Add the site to this project per `add-wordpress-site.md` with `enabled: false` initially.
 3. Database migration: dump the source DB, import to DO Managed MySQL. Verify the actual `wp_table_prefix` matches the value in the site var file before going live (this has bitten us before — see `status.md` lessons learned).
 4. Content migration: rsync the source `wp-content/` to `/opt/sites/<site>/wp-content/` with correct ownership:
    ```bash
