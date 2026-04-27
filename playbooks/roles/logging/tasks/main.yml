@@ -42,9 +42,16 @@
     mode: "0644"
   notify: Restart logging
 
+# pull is intentionally left at the module default (policy) rather than
+# always. The compose file pins an exact image tag (logging_vector_image
+# default: timberio/vector:0.47.0-alpine), so `pull: always` adds no real
+# safety here — it only fetches the same digest. It does, however, make
+# this task report `changed` on every --check --diff run, because
+# community.docker cannot prove a pull would be a no-op in dry-run mode
+# (see KB lesson community.docker/check-mode-fidelity-pre-3-10.md).
+# Image rolls forward via the logging_vector_image variable instead.
 - name: Start logging stack
   community.docker.docker_compose_v2:
     project_src: "{{ logging_dir }}"
     state: present
-    pull: always
     recreate: auto
