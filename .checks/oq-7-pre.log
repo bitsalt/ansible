@@ -1,0 +1,14 @@
+NAMES                               IMAGE                           CREATED AT                      STATUS
+seaislandlife-nginx-1               nginx:alpine                    2026-04-27 18:03:15 +0000 UTC   Up 5 minutes
+seaislandlife-wordpress-1           seaislandlife-wordpress         2026-04-27 18:03:15 +0000 UTC   Up 5 minutes
+taotedev-nginx-1                    nginx:alpine                    2026-04-27 18:03:07 +0000 UTC   Up 6 minutes
+taotedev-wordpress-1                taotedev-wordpress              2026-04-27 18:03:07 +0000 UTC   Up 6 minutes
+frujo-frujo-web-1                   bitsalt/frujo-finance:latest    2026-04-27 17:30:25 +0000 UTC   Up 38 minutes (healthy)
+logging-vector                      timberio/vector:0.47.0-alpine   2026-04-24 18:47:22 +0000 UTC   Up 2 days
+mybizmag-app-1                      bitsalt/mybizmag:latest         2026-04-24 17:56:30 +0000 UTC   Up 3 days
+bitsalt-staging-bitsalt-staging-1   bitsalt/bitsalt-prod:latest     2026-04-24 12:40:19 +0000 UTC   Up 3 days
+bitsalt-bitsalt-web-1               bitsalt/bitsalt-prod:latest     2026-04-22 11:33:31 +0000 UTC   Up 5 days
+proxy-traefik-1                     traefik:v3.6.13                 2026-04-20 14:13:34 +0000 UTC   Up 7 days
+proxy-socket-proxy-1                nginx:alpine                    2026-04-20 14:13:24 +0000 UTC   Up 7 days
+---
+2026-04-27T18:09:13Z
