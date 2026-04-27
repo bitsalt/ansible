@@ -22,7 +22,7 @@ A secret needs to change: a new site's DB password, a credential rotation, the D
 ### 1. Edit the vault
 
 ```bash
-cd ~/projects/bitsalt-ansible/playbooks
+cd ~/projects/ansible/playbooks
 ansible-vault edit group_vars/all/vault.yml
 ```
 

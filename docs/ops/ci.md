@@ -1,6 +1,6 @@
 # Operations: CI/CD
 
-GitHub Actions workflows for bitsalt-ansible itself and the contract for app-repo CI/CD that deploys to the Droplet.
+GitHub Actions workflows for this `ansible` project itself and the contract for app-repo CI/CD that deploys to the Droplet.
 
 **Related ADR:** [0003 Docker Hub registry](../adr/0003-docker-hub-registry.md)
 **Related interface:** [ci-deploy.md](../interfaces/ci-deploy.md)

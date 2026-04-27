@@ -73,7 +73,7 @@ Node.js and FastAPI sites share the `webapp` role (a generic stateless-HTTP-cont
 ## Directory structure
 
 ```
-bitsalt-ansible/
+ansible/
   ansible.cfg
   site.yml                        # top-level orchestrator
   requirements.yml                # collection dependencies

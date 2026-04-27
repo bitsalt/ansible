@@ -16,6 +16,6 @@
 ## Notes / edge cases
 
 - The deploy-user SSH key must be generated on the Droplet and the private key copied to GitHub Secrets, then deleted from the Droplet — this is a manual post-bootstrap step, not automated.
-- DO Monitoring agent is enabled in the DO dashboard; bitsalt-ansible does not provision it. (Future scope: see `add-daily-backups.md` and FR10 for whether monitoring agent installation should be added to a role.)
+- DO Monitoring agent is enabled in the DO dashboard; this project does not provision it. (Future scope: see `add-daily-backups.md` and FR10 for whether monitoring agent installation should be added to a role.)
 - UFW / Fail2ban / unattended-upgrades currently land via `bootstrap.sh`. To support re-convergence on a rebuild, equivalent Ansible roles should exist (currently a known gap — see `status.md`).
 - The bootstrap script does not modify the SSH port from a non-default to a different non-default value safely; if the port needs to change post-bootstrap, plan the change carefully to avoid losing connectivity.

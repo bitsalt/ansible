@@ -1,8 +1,10 @@
-# bitsalt-ansible
+# ansible
 
 Ansible repo that provisions and maintains a single-DigitalOcean-Droplet hosting environment for BitSalt's portfolio of WordPress, Laravel, Node.js, and FastAPI sites behind a shared Traefik reverse proxy. All databases run on DO Managed clusters; all secrets live in Ansible Vault.
 
-This repo *is* the deploy mechanism for the infra layer — there is no separate CI deploy of bitsalt-ansible itself. App-site deploys (Laravel, Node.js, FastAPI) live in each app's own repo and SSH into the Droplet under a contract documented at [docs/interfaces/ci-deploy.md](docs/interfaces/ci-deploy.md).
+> **Repo history note.** This project was previously named `bitsalt-ansible` and renamed in April 2026 as part of a vault-wide drop-the-prefix pass. Some legacy lessons-learned and external cross-references may still refer to the old name. The GitHub repo is now `bitsalt/ansible`; the named remote `bitsalt-ansible` is retained locally for historical reference only.
+
+This repo *is* the deploy mechanism for the infra layer — there is no separate CI deploy of ansible itself. App-site deploys (Laravel, Node.js, FastAPI) live in each app's own repo and SSH into the Droplet under a contract documented at [docs/interfaces/ci-deploy.md](docs/interfaces/ci-deploy.md).
 
 ---
 
@@ -11,7 +13,7 @@ This repo *is* the deploy mechanism for the infra layer — there is no separate
 If you already have the operator credentials and are joining an in-flight project:
 
 1. **Read** [docs/getting-started.md](docs/getting-started.md) for prerequisites and control-node setup.
-2. **Read** the active [sprint file](docs/bitsalt-ansible.md) to see what's in flight.
+2. **Read** the active [sprint file](docs/ansible.md) to see what's in flight.
 3. **Skim** [docs/architecture.md](docs/architecture.md) for the system shape and the [ADRs](docs/adr/) for the non-obvious decisions.
 4. **Run** the Quick start section in [playbooks/README.md](playbooks/README.md) to apply the playbook.
 
@@ -24,7 +26,6 @@ For the full end-to-end onboarding (no prior context), see [docs/onboarding.md](
 | Path | Purpose |
 |---|---|
 | `playbooks/` | **Source of truth.** All current Ansible work happens here. |
-| `v1/` | Legacy structure, retained for reference until the refactor is fully validated. Do not modify. |
 | `bootstrap.sh` | First-boot Droplet hardening script. Standalone Bash; runs once per Droplet. |
 | `docs/` | All project documentation (this README is the entry point). |
 | `docs/architecture.md` | System architecture and component overview. |
@@ -34,7 +35,7 @@ For the full end-to-end onboarding (no prior context), see [docs/onboarding.md](
 | `docs/ops/` | Operational reference: Ansible patterns, CI/CD contracts, user inventory. |
 | `docs/requirements.md` | What the system must do (functional + non-functional). |
 | `docs/user-stories/` | Per-capability user stories driving the requirements. |
-| `docs/bitsalt-ansible.md` | Sprint file (active work, decisions log, open questions). |
+| `docs/ansible.md` | Sprint file (active work, decisions log, open questions). |
 | `.agent-context.md` | Compact context for Claude Code agents arriving cold. |
 | `.github/workflows/lint.yml` | CI: `ansible-lint` + `yamllint` on push/PR. |
 | `requirements.txt` | Pinned control-node tooling (ansible-lint, yamllint). |

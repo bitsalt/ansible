@@ -1,6 +1,6 @@
 # Interface: app-repo CI/CD ↔ Droplet deploy
 
-The contract between an app repo's CI/CD pipeline (typically GitHub Actions) and the Droplet hosted by bitsalt-ansible. Applies to **webapp sites only** (Node.js, FastAPI, similar). WordPress and Laravel sites do not currently use this contract; their image-tag bumps happen via Ansible re-runs.
+The contract between an app repo's CI/CD pipeline (typically GitHub Actions) and the Droplet hosted by this `ansible` project. Applies to **webapp sites only** (Node.js, FastAPI, similar). WordPress and Laravel sites do not currently use this contract; their image-tag bumps happen via Ansible re-runs.
 
 References: coding-standards `coding-standards.md` §14 (API / Interface Design); [ADR 0006](../adr/0006-webapp-ownership-boundary.md).
 
@@ -8,13 +8,13 @@ References: coding-standards `coding-standards.md` §14 (API / Interface Design)
 
 ## Purpose
 
-A site's CI/CD pipeline must be able to deploy a new version of the app without an Ansible run, while bitsalt-ansible retains ownership of `.env` and the surrounding environment. This interface specifies what each side provides and what each side requires.
+A site's CI/CD pipeline must be able to deploy a new version of the app without an Ansible run, while this project retains ownership of `.env` and the surrounding environment. This interface specifies what each side provides and what each side requires.
 
 ---
 
 ## Responsibilities
 
-### bitsalt-ansible provides
+### ansible provides
 
 - **`/opt/sites/<site>/`** directory with mode 0755, owned by the operator-equivalent user.
 - **`/opt/sites/<site>/.env`** at mode 0600, rendered from the vault, regenerated on Ansible apply when vault values change.
@@ -86,7 +86,7 @@ A site's CI/CD pipeline must be able to deploy a new version of the app without 
 This interface is informal — there is no version field on the contract today. Material changes (e.g., a new deploy-time secret moves from CI Secrets to vault, or vice versa) require:
 
 1. An ADR documenting the change.
-2. A coordinated update to bitsalt-ansible (new vault entry / role behavior) **and** to each app repo's CI/CD pipeline.
+2. A coordinated update to ansible (new vault entry / role behavior) **and** to each app repo's CI/CD pipeline.
 3. A stop-the-world transition: do not deploy mid-rollout.
 
 If multiple stable shapes of this contract become necessary (e.g., legacy webapps that can't migrate to a new pattern), introduce explicit versioning at that point.

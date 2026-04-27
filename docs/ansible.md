@@ -1,4 +1,4 @@
-# bitsalt-ansible — Sprint file
+# ansible — Sprint file
 
 Single source of truth for in-flight work. PM is the only writer; other roles propose changes via the Open Questions table.
 
@@ -46,7 +46,7 @@ Complete Task B drift reconciliation: re-baseline `--check --diff` against `comm
 |---|---|---|---|---|
 | OQ-1 | Architect (handoff note) | Should the Docker socket proxy and nginx-sidecar design notes be promoted to standalone ADRs? | Defer; revisit in Phase 3 retro. They are external-constraint-driven implementation details, not choices with meaningful alternatives. | open |
 | OQ-2 | DevOps (handoff note) | Should `wordpress-core-upgrade.md` and `migrate-wordpress.md` runbooks be authored now or just-in-time on first invocation? | Defer to just-in-time. The user stories document the *what*; the runbook is the *how*, best authored against a real run. | open |
-| OQ-3 | PM | Should `v1/` be retired now or after the remaining ~11 WordPress site migrations? | Retain `v1/` until at least the first three migrated sites have run cleanly under `playbooks/` end-to-end. Revisit at sprint review. | open |
+| OQ-3 | PM | Should `v1/` be retired now or after the remaining ~11 WordPress site migrations? | Retain `v1/` until at least the first three migrated sites have run cleanly under `playbooks/` end-to-end. Revisit at sprint review. | **resolved 2026-04-26** — `v1/` removed (commit `97352f8`); see decisions log. |
 | OQ-4 | PM | Should `status.md` and `docs/refactor.md` be retired now that their content is in the sprint file + ADRs? | Retain through this sprint as a cross-reference; retire at sprint review once Task B is complete. | open |
 | OQ-5 | PM | Coordinate rename of legacy vault key `taotedev_db_password` → `vault_taotedev_db_password` — when? | Defer. Bundle with a future vault-hygiene pass; not blocking any current work. | open |
 | OQ-6 | PM | `docs/TODO.md` (from remote merge) and the sprint file's Open Questions / Carry-over Log are parallel bug-parking surfaces. Pick one as canonical. | Leaning toward keeping `TODO.md` for "investigations surfaced outside the active session" and the sprint file for in-flight sprint work. Will need a clear handoff convention so issues don't sit in both places. | open |
@@ -58,6 +58,12 @@ Other roles append proposals here; PM lands them at the next sprint review or on
 ## Decisions log
 
 New entries at the top.
+
+### 2026-04-26
+
+- **`bitsalt-ansible` → `ansible` rename pass landed in this repo (Sprint 1 tail of OQ-PORTFOLIO-12).** Sprint file renamed `docs/bitsalt-ansible.md` → `docs/ansible.md`; title and self-references updated; `.agent-context.md`, `README.md`, `playbooks/README.md`, and the cross-references inside `docs/` (architecture, requirements, interfaces, ops, runbooks, user-stories, getting-started, onboarding) updated to use the new project name. Decisions-log entries from earlier dates are preserved as historical record — they reference `bitsalt-ansible` because that was the project's name at the time. The portfolio dashboard was renamed `BitSalt-Projects.md` → `Projects.md` in the same pass; in-prose references in this file have been updated. Driving OQ at portfolio level: `OQ-PORTFOLIO-12` in `platform/Projects.md`.
+- **`v1/` retired (resolves OQ-3 by action).** Jeff removed `archive/` and `v1/` from the working tree (commit `97352f8` on `main`). The OQ-3 proposed resolution had been "retain `v1/` until at least the first three migrated sites have run cleanly under `playbooks/` end-to-end"; that retention rationale turned out not to be load-bearing (nothing in `v1/` was specifically tied to WordPress migrations). OQ-3 closed. Any remaining `v1/` references in `architecture.md`, ADRs, `docs/refactor.md`, `status.md`, and `playbooks/README.md` are out of scope for this rename pass and will be cleaned up in a follow-on sweep.
+- **Operator-discipline phrasing updated.** The 2026-04-25 operator-discipline note is preserved verbatim below (historical record); ongoing references in `Projects.md` row blockers and prose now read "no manual changes on the ansible-managed server."
 
 ### 2026-04-25
 

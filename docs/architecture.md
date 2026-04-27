@@ -1,4 +1,4 @@
-# bitsalt-ansible — Architecture
+# ansible — Architecture
 
 How the BitSalt site-hosting infrastructure is structured. Non-obvious decisions live in `docs/adr/`; component boundaries live in `docs/interfaces/`. This document is the entry point that ties them together.
 
@@ -24,7 +24,7 @@ The Ansible repo is the source of truth for what the Droplet should look like. P
 | Object storage | DO Spaces (planned, for backups per FR9) |
 | DNS | Manual records in DO DNS dashboard pointing at Droplet IP |
 
-DO resources (Droplet, Managed clusters, Spaces, DNS) are provisioned manually in the dashboard; bitsalt-ansible operates against what's there. No Terraform or DO API automation today (out of scope per requirements.md).
+DO resources (Droplet, Managed clusters, Spaces, DNS) are provisioned manually in the dashboard; this project operates against what's there. No Terraform or DO API automation today (out of scope per requirements.md).
 
 Single-Droplet design is a deliberate scope constraint, not an architectural goal — multi-region or HA is out of scope absent an explicit ADR. See [requirements.md](requirements.md) "Out of scope."
 
@@ -143,7 +143,7 @@ PII redaction lives in the Vector pipeline config (`vector.yaml.j2` template). A
 
 ## Component boundaries
 
-The most consequential cross-team boundary is **app-repo CI/CD ↔ the Droplet**, where an app repo's GitHub Actions pipeline reaches into the bitsalt-ansible-managed environment. The contract is specified at:
+The most consequential cross-team boundary is **app-repo CI/CD ↔ the Droplet**, where an app repo's GitHub Actions pipeline reaches into the ansible-managed environment. The contract is specified at:
 
 - [`docs/interfaces/ci-deploy.md`](interfaces/ci-deploy.md)
 

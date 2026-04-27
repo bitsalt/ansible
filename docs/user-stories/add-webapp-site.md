@@ -17,5 +17,5 @@
 
 - DB connections use DO Managed PostgreSQL with credentials from the vault.
 - The `webapp` role serves any single-port stateless HTTP app that takes config via env vars. If a future site needs a sidecar worker, bind mount, or non-HTTP entrypoint, split a new role rather than complicating `webapp`.
-- The GitHub Secrets for the deploy must be set per repo: `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `DROPLET_HOST`, `DEPLOY_SSH_KEY`. Document this in the per-repo runbook the app team owns; bitsalt-ansible's runbook references it but does not own it.
+- The GitHub Secrets for the deploy must be set per repo: `DOCKER_USERNAME`, `DOCKER_PASSWORD`, `DROPLET_HOST`, `DEPLOY_SSH_KEY`. Document this in the per-repo runbook the app team owns; this project's runbook references it but does not own it.
 - Drift in `docker-compose.yml` between Ansible-templated and live (drift inventory item #3) was resolved 2026-04-24 by the ownership change — `webapp` no longer templates compose. Do not reintroduce.

@@ -1,6 +1,6 @@
 # Operations: Ansible
 
-Day-to-day Ansible operations for bitsalt-ansible. Reference material; for step-by-step procedures see the runbooks under `docs/runbooks/`.
+Day-to-day Ansible operations for this `ansible` project. Reference material; for step-by-step procedures see the runbooks under `docs/runbooks/`.
 
 **Related architecture:** [architecture.md § Ansible structure](../architecture.md#ansible-structure)
 
@@ -11,7 +11,7 @@ Day-to-day Ansible operations for bitsalt-ansible. Reference material; for step-
 All run from `playbooks/` directory:
 
 ```bash
-cd ~/projects/bitsalt-ansible/playbooks
+cd ~/projects/ansible/playbooks
 ```
 
 ### Full provisioning
