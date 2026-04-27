@@ -68,6 +68,23 @@
     remove_volumes: true
   when: env_result.changed
 
+# This task reports `changed` on every `--check --diff` against migrated
+# WordPress sites. compose v2 cannot prove a `build: .` stanza would be a
+# no-op without actually running the build, so check-mode scores it changed
+# even when nothing has drifted. Same family of false positive as the
+# Traefik handler bind-mount-content carve-out (handlers/main.yml of the
+# traefik role) and the `pull: always` case in
+# ~/projects/agent-knowledge-base/lessons/community.docker/pull-always-with-pinned-tag.md;
+# upstream lesson at
+# ~/projects/agent-knowledge-base/lessons/community.docker/check-mode-fidelity-pre-3-10.md
+# explicitly scopes the surviving check-mode false positive to `build: always`.
+# At apply time this is a no-op for unchanged sites: the `build:` argument
+# below resolves to `policy` (compose's `missing` default) when the
+# Dockerfile is unchanged, so no rebuild runs; `recreate: auto` then leaves
+# the container alone unless the rendered compose file or env_file drifted.
+# Cross-site blast radius is bounded — the noisy `--check` line is cosmetic.
+# See docs/adr/0009-wordpress-image-build-strategy.md for the decision and
+# the option (d) escalation trigger (~5 migrated WP sites).
 - name: Start WordPress site
   community.docker.docker_compose_v2:
     project_src: "{{ sites_base_dir }}/{{ item.site_name }}"
