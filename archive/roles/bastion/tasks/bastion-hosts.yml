@@ -1,7 +1,0 @@
----
-# Add appservers to hosts file
-- name: Edit hosts file
-  lineinfile:
-    path: /etc/hosts
-    line: "{{ item[1] }}"
-  with_indexed_items: "{{ appserver_hosts }}"
